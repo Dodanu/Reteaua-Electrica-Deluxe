@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1658238626 source:h:\c++ proiecte\piata electrica deluxe\simulator\main.cpp
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	<string.h>
+	<string>
+	<random>
+	<cstdlib>
+	<string>
+	<windows.h>
+	<time.h>
+
