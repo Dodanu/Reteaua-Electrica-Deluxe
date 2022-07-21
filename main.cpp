@@ -22,22 +22,25 @@ cum fonctioneaza harta:
             [[Bordeux,-1,-1, 12,0][Lyon,0,-1,11,0][Zurich,1,-1,14,0][London,-1,1,16,0][Stuttgart,0,1,14,0][Rhein-Ruhr,1,1,10,0][Vlaaderen,1,0,7,0]]
 conventie numire centrale:
     3(pret)C(combustibil)1(oras)2(folosire combustibil)
+
+ifstream ceva("ceva"); comentarii inseamna -> (termen(i))<-efectiv ce face + ultim cuv <- in ce domeniu se afla
 */
 
 using namespace std;
 
-ifstream cePin("centrale.data");
-ifstream ceCin("centraleComb.data");
-ifstream ceOin("centraleOrase.data");
-ifstream ceFCin("centraleFolosireComb.data");
-ifstream ceNCin("centraleNumeCentrale.data");
-ifstream heuNumin("hartaeu.map");
-ifstream heuNrConexin("harataeuNumConex.map");
-ifstream heuNumConexin("harataeuNumConex.map");
-ifstream heuNrCen("hartaeuNrCen.map");
-ifstream heuCordX("hartaeuCordX.map");
-ifstream heuCordY("hartaeuCordY.map");
-ifstream heuPretConex("hartaeuPretConex.map");
+ifstream cePin("centrale.data");  //pret centrala
+ifstream ceCin("centraleComb.data");  //combustibil folosit centrala
+ifstream ceOin("centraleOrase.data"); //cate orase alimenteaza centrala
+ifstream ceFCin("centraleFolosireComb.data"); //cat combustibil folosit centrala
+ifstream ceNCin("centraleNumeCentrale.data"); //nume centrala
+ifstream heuNumin("hartaeu.map"); //nume orase
+ifstream heuNrConexin("harataeuNumConex.map");  //numar conex orase
+ifstream heuNumConexin("harataeuNumConex.map"); //nume orase la conex orase
+ifstream heuNrCen("hartaeuNrCen.map");   //cate cen pe orase
+ifstream heuCordX("hartaeuCordX.map");  //cord X conex orase
+ifstream heuCordY("hartaeuCordY.map");  //cord Y conex orase
+ifstream heuPretConex("hartaeuPretConex.map");  //pret conex orase
+ifstream heuCJCO("hartaeuCJCO.map"); //ce jucator detine centrala pe oras orase
 
 struct centrala{
     char numeCen[7];
@@ -150,7 +153,8 @@ void citireCentrale(centrala centrale[])
 
 void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
-    int centPePiata;
+    int centPePiata, auxSMC[10], nAux = 0;
+    char axuNum[10][10];
     cin>>centPePiata;
     cin.ignore();
     for(int i=0; i<centPePiata; i++){
@@ -184,6 +188,9 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
                     //cout<<"da eco"<<endl;
                     centrale[j].SMC = eMeta[stage] + ors - centrale[j].combNecesar - (centrale[j].pret/10);
                 }
+                auxSMC[nAux] = centrala[j].SMC;
+                strcpy(auxNum[nAux], central[i].numeCen);
+                /*
                 if(centrale[j].SMC>7){
                     SetConsoleTextAttribute(h,2);
                     cout<<"Scor meta al centralei "<<centrale[j].numeCen<<" este: "<<centrale[j].SMC<<endl;
@@ -197,8 +204,24 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
                     cout<<"Scor meta al centralei "<<centrale[j].numeCen<<" este: "<<centrale[j].SMC<<endl;
                 }
                 SetConsoleTextAttribute(h,15);
+                */
             }
         }
+    }
+    for(int i=0; i<nAux; i++){
+        if(auxSMC[i]>7){
+            SetConsoleTextAttribute(h,2);
+            cout<<"Scor meta al centralei "<<centrale[j].numeCen<<" este: "<<auxNum[j]<<endl;
+        }
+        if(5<=auxSMC[i] || auxSMC[i]<=7){
+            SetConsoleTextAttribute(h,14);
+            cout<<"Scor meta al centralei "<<centrale[j].numeCen<<" este: "<<auxNum[j]<<endl;
+        }
+        if(auxSMC[i]<5){
+            SetConsoleTextAttribute(h,4);
+            cout<<"Scor meta al centralei "<<centrale[j].numeCen<<" este: "<<auxNum[j]<<endl;
+        }
+        SetConsoleTextAttribute(h,15);
     }
 }
 
@@ -274,10 +297,11 @@ int main()
     int ePreturi[1][9] = {{0}};
     int eX=1, eY=1;
     int eMeta[3] = {10,10,10};
+    int centraleDetinute[4], combDetinut[100], centraleDetinuteAltiJucatori[6][4], numarOraseCuCentrale[6][1];
     //cout<<"Dati numarul de jucatori: ";
     //cin>>numarJucatori;
-    //citireCentrale(centrale);
-    //citireCentraleInUz(centInUz,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
+    citireCentrale(centrale);
+    citireCentraleInUz(centInUz,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
     //cataSchimbareCombustibil(numarJucatori,stage,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
     //citireHartaEU(hartaEuropa);
     //afisareHartaEu(hartaEuropa);
