@@ -153,8 +153,9 @@ void citireCentrale(centrala centrale[])
 
 void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
-    int centPePiata, auxSMC[10], nAux = 0;
-    char axuNum[10][10];
+    int centPePiata, nAux = 0;
+    float auxSMC[10];
+    char auxNum[10][10];
     cin>>centPePiata;
     cin.ignore();
     for(int i=0; i<centPePiata; i++){
@@ -188,8 +189,9 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
                     //cout<<"da eco"<<endl;
                     centrale[j].SMC = eMeta[stage] + ors - centrale[j].combNecesar - (centrale[j].pret/10);
                 }
-                auxSMC[nAux] = centrala[j].SMC;
-                strcpy(auxNum[nAux], central[i].numeCen);
+                auxSMC[nAux] = centrale[j].SMC;
+                strcpy(auxNum[nAux], centrale[i].numeCen);
+                nAux++;
                 /*
                 if(centrale[j].SMC>7){
                     SetConsoleTextAttribute(h,2);
@@ -211,15 +213,15 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
     for(int i=0; i<nAux; i++){
         if(auxSMC[i]>7){
             SetConsoleTextAttribute(h,2);
-            cout<<"Scor meta al centralei "<<centrale[j].numeCen<<" este: "<<auxNum[j]<<endl;
+            cout<<"Scor meta al centralei "<<auxNum[i]<<" este: "<<auxSMC[i]<<endl;
         }
         if(5<=auxSMC[i] || auxSMC[i]<=7){
             SetConsoleTextAttribute(h,14);
-            cout<<"Scor meta al centralei "<<centrale[j].numeCen<<" este: "<<auxNum[j]<<endl;
+            cout<<"Scor meta al centralei "<<auxNum[i]<<" este: "<<auxSMC[i]<<endl;
         }
         if(auxSMC[i]<5){
             SetConsoleTextAttribute(h,4);
-            cout<<"Scor meta al centralei "<<centrale[j].numeCen<<" este: "<<auxNum[j]<<endl;
+            cout<<"Scor meta al centralei "<<auxNum[i]<<" este: "<<auxSMC[i]<<endl;
         }
         SetConsoleTextAttribute(h,15);
     }
