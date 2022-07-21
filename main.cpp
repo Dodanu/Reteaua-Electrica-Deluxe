@@ -10,6 +10,7 @@
 #include <time.h>
 
 /**
+am autism
 cum fonctioneaza harta:
     exemplu:
         Nume:
@@ -34,7 +35,7 @@ ifstream ceOin("centraleOrase.data"); //cate orase alimenteaza centrala
 ifstream ceFCin("centraleFolosireComb.data"); //cat combustibil folosit centrala
 ifstream ceNCin("centraleNumeCentrale.data"); //nume centrala
 ifstream heuNumin("hartaeu.map"); //nume orase
-ifstream heuNrConexin("harataeuNumConex.map");  //numar conex orase
+ifstream heuNrConexin("harataeuNrConex.map");  //numar conex orase
 ifstream heuNumConexin("harataeuNumConex.map"); //nume orase la conex orase
 ifstream heuNrCen("hartaeuNrCen.map");   //cate cen pe orase
 ifstream heuCordX("hartaeuCordX.map");  //cord X conex orase
@@ -137,7 +138,6 @@ void citireCentrale(centrala centrale[])
     int i = 0;
     while(i<42){
         cePin>>pr;
-
         ceCin.getline(aux, 3, '\n');
         ceOin>>ors;
         ceFCin>>comb;
@@ -192,21 +192,6 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
                 auxSMC[nAux] = centrale[j].SMC;
                 strcpy(auxNum[nAux], centrale[j].numeCen);
                 nAux++;
-                /*
-                if(centrale[j].SMC>7){
-                    SetConsoleTextAttribute(h,2);
-                    cout<<"Scor meta al centralei "<<centrale[j].numeCen<<" este: "<<centrale[j].SMC<<endl;
-                }
-                if(5<=centrale[j].SMC || centrale[j].SMC<=7){
-                    SetConsoleTextAttribute(h,14);
-                    cout<<"Scor meta al centralei "<<centrale[j].numeCen<<" este: "<<centrale[j].SMC<<endl;
-                }
-                if(centrale[j].SMC<5){
-                    SetConsoleTextAttribute(h,4);
-                    cout<<"Scor meta al centralei "<<centrale[j].numeCen<<" este: "<<centrale[j].SMC<<endl;
-                }
-                SetConsoleTextAttribute(h,15);
-                */
             }
         }
     }
@@ -299,7 +284,9 @@ int main()
     int ePreturi[1][9] = {{0}};
     int eX=1, eY=1;
     int eMeta[3] = {10,10,10};
-    int centraleDetinute[4], combDetinut[100], centraleDetinuteAltiJucatori[6][4], numarOraseCuCentrale[6][1];
+    //explicatie rand jos: 1)ce combustibil detin 2) cate orase are fiecare jucator(inclusiv eu) 3) cati bani detin 4) cati bani detin alti nrJucatori
+    int combDetinut[100], numarOraseCuCentrale[7][1], baniDentinuti[1], baniDetAltiJucatori[7][1];
+    centrala centraleDetinute[4], centraleDetinuteAltiJucatori[6][4];
     //cout<<"Dati numarul de jucatori: ";
     //cin>>numarJucatori;
     citireCentrale(centrale);
