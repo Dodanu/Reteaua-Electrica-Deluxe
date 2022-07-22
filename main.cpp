@@ -145,9 +145,9 @@ void citireCentrale(centrala centrale[])
 
 void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
-    int centPePiata, nAux = 0;
+    int centPePiata, nAux = 0, centraleCump;
     float auxSMC[45];
-    char auxNum[45][45];
+    char auxNum[45][45], aux2[255];
     centrala centraleInUz[9];
     cin>>centPePiata;
     cin.ignore();
@@ -204,6 +204,18 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
         }
     }
     SetConsoleTextAttribute(h,15);
+    for(int i=0; i<nAux; i++){
+        cout<<centraleInUz[i]<<" ";
+    }
+    cout<<"Cate centrale au fost cumparate?"<<endl;
+    cin>>centraleCump;
+    for(int i=0; i<centraleCump; i++){
+        cout<<"Care centrala a fost cumparata?"<<endl;
+        cin.getline(aux2,255);
+        cout<<"Care jucator a cumparat centrala"<<endl;
+    }
+
+
 }
 
 void schimbareCombustibil(int preturi[][9],int x,int y,int cateDeAdaug)
