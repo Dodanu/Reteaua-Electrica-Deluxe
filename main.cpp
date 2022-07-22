@@ -143,11 +143,12 @@ void citireCentrale(centrala centrale[])
     }
 }
 
-void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[],centrala centraleDetinute[4],centrala centraleDetinuteAltiJucatori[6][4],int &contorCenDet,int contorCenDetAltJuc[],int &baniDentinuti,int baniDetAltiJucatori[5][1])
+void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[],centrala centraleDetinute[],centrala centraleDetinuteAltiJucatori[][4],int &contorCenDet,int contorCenDetAltJuc[],int &baniDentinuti,int baniDetAltiJucatori[][1])
 {
     int centPePiata, nAux = 0, centraleCump, jucator;
     float auxSMC[45];
-    char auxNum[45][45], aux2[255];
+    char auxNum[45][45];
+    int aux2;
     centrala centraleInUz[9];
     cin>>centPePiata;
     cin.ignore();
@@ -211,19 +212,19 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
     cin>>centraleCump;
     for(int i=0; i<centraleCump; i++){
         cout<<"Care centrala a fost cumparata?"<<endl;
-        cin.getline(aux2,255);
+        cin>>aux2;
         cout<<"Care jucator a cumparat centrala"<<endl;
         cin>>jucator;
         if(jucator==0){
-            centraleDetinute[contorCenDet] = centraleInUz[i];
+            centraleDetinute[contorCenDet] = centraleInUz[aux2];
             baniDentinuti = baniDentinuti - centraleDetinute[contorCenDet].pret;
             contorCenDet++;
         }
         else{
             if(1<=jucator && jucator<=6){
-                int pretAuxCeva = centraleDetinuteAltiJucatori[jucator-1][contorCenDetAltJuc[jucator-1]].pret, altAuxPretCeva = baniDetAltiJucatori[jucator-1];
-                centraleDetinuteAltiJucatori[jucator-1][contorCenDetAltJuc[jucator-1]] = centraleInUz[i];
-                baniDetAltiJucatori[jucator-1] = altAuxPretCeva - pretAuxCeva;
+                int auxCentDetAltJuc = contorCenDetAltJuc[jucator-1];
+                centraleDetinuteAltiJucatori[jucator-1][contorCenDetAltJuc[jucator-1]] = centraleInUz[aux2[255]];
+                baniDetAltiJucatori[jucator-1][0] = baniDetAltiJucatori[jucator-1] - &centraleDetinuteAltiJucatori[jucator-1][auxCentDetAltJuc].pret;
                 contorCenDetAltJuc[jucator-1]++;
             }
             else{
