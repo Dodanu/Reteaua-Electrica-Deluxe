@@ -123,13 +123,6 @@ void citireHartaEU(hartaEU &hE)
     }
 }
 
-void afisareCentrale(centrala centrale[])
-{
-    for(int i=0; i<42; i++){
-        cout<<centrale[i].numeCen<<" "<<centrale[i].pret<<" "<<centrale[i].numeComb<<endl;
-    }
-}
-
 void citireCentrale(centrala centrale[])
 {
     int pr, ors, comb;
@@ -155,6 +148,7 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
     int centPePiata, nAux = 0;
     float auxSMC[45];
     char auxNum[45][45];
+    centrala centraleInUz[9];
     cin>>centPePiata;
     cin.ignore();
     for(int i=0; i<centPePiata; i++){
@@ -165,31 +159,30 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
                 if(centrale[j].orase<3)
                     ors = ors * -1 - (3-ors);
                 if(strcmp(centrale[j].numeComb,"C")==0){
-                    //cout<<"da carb"<<endl;
                     centrale[j].SMC = cMeta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(cPreturi, cX, cY)) - (centrale[j].pret/10);
                 }
                 if(strcmp(centrale[j].numeComb,"A")==0){
-                    //cout<<"da apa"<<endl;
                     centrale[j].SMC = aMeta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(aPreturi, aX, aY)) - (centrale[j].pret/10);
                 }
                 if(strcmp(centrale[j].numeComb,"P")==0){
-                    //cout<<"da pet"<<endl;
                     centrale[j].SMC = pMeta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(pPreturi, pX, pY)) - (centrale[j].pret/10);
                 }
                 if(strcmp(centrale[j].numeComb,"AP")==0){
-                    //cout<<"da appet"<<endl;
                     centrale[j].SMC = aPMeta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(aPPreturi, aPX, aPY)) - (centrale[j].pret/10);
                 }
                 if(strcmp(centrale[j].numeComb,"N")==0){
-                    //cout<<"da nuc"<<endl;
                     centrale[j].SMC = nMeta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(nPreturi, nX, nY)) - (centrale[j].pret/10);
                 }
                 if(strcmp(centrale[j].numeComb,"E")==0){
-                    //cout<<"da eco"<<endl;
-                    centrale[j].SMC = eMeta[stage] + ors - centrale[j].combNecesar - (centrale[j].pret/10);
+                    centrale[j].SMC = eMeta[stage] + ors - (centrale[j].pret/10);
                 }
                 auxSMC[nAux] = centrale[j].SMC;
                 strcpy(auxNum[nAux], centrale[j].numeCen);
+                centraleInUz[nAux].pret = centrale[j].pret;
+                centraleInUz[nAux].orase = centrale[j].orase;
+                centraleInUz[nAux].combNecesar = centrale[j].combNecesar;
+                strcpy(centraleInUz[nAux].numeComb, centrale[j].numeComb);
+                strcpy(centraleInUz[nAux].numeCen, centrale[j].numeCen);
                 nAux++;
             }
         }
@@ -199,16 +192,18 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
             SetConsoleTextAttribute(h,2);
             cout<<"Scor meta al centralei "<<auxNum[i]<<" este: "<<auxSMC[i]<<endl;
         }
-        if(5<=auxSMC[i] || auxSMC[i]<=7){
-            SetConsoleTextAttribute(h,14);
-            cout<<"Scor meta al centralei "<<auxNum[i]<<" este: "<<auxSMC[i]<<endl;
+        else{
+            if(5<=auxSMC[i] && auxSMC[i]<=7){
+                SetConsoleTextAttribute(h,14);
+                cout<<"Scor meta al centralei "<<auxNum[i]<<" este: "<<auxSMC[i]<<endl;
+            }
+            else{
+                SetConsoleTextAttribute(h,4);
+                cout<<"Scor meta al centralei "<<auxNum[i]<<" este: "<<auxSMC[i]<<endl;
+            }
         }
-        if(auxSMC[i]<5){
-            SetConsoleTextAttribute(h,4);
-            cout<<"Scor meta al centralei "<<auxNum[i]<<" este: "<<auxSMC[i]<<endl;
-        }
-        SetConsoleTextAttribute(h,15);
     }
+    SetConsoleTextAttribute(h,15);
 }
 
 void schimbareCombustibil(int preturi[][9],int x,int y,int cateDeAdaug)
@@ -283,9 +278,11 @@ int main()
     int ePreturi[1][9] = {{0}};
     int eX=1, eY=1;
     int eMeta[3] = {10,10,10};
-    //explicatie rand jos: 1)ce combustibil detin 2) cate orase are fiecare jucator(inclusiv eu) 3) cati bani detin 4) cati bani detin alti nrJucatori
-    int combDetinut[100], numarOraseCuCentrale[7][1], baniDentinuti[1], baniDetAltiJucatori[7][1];
+    int nrOrasPtVic = 18, nrOrasdetinut, nrOrasDetinutAltiJucatori[5][1] = {{0},{0},{0},{0},{0}};
+    int orasPosbilAlimentare, orasPosbilAlimentareAltiJucatori[5][1] = {{0},{0},{0},{0},{0}};
+    int numarOraseCuCentrale[7][1], baniDentinuti = 50, baniDetAltiJucatori[5][1] = {{50},{50},{50},{50},{50}};
     centrala centraleDetinute[4], centraleDetinuteAltiJucatori[6][4];
+    char combDetinut[100];
     //cout<<"Dati numarul de jucatori: ";
     //cin>>numarJucatori;
     citireCentrale(centrale);
