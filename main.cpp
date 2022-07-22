@@ -143,9 +143,9 @@ void citireCentrale(centrala centrale[])
     }
 }
 
-void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
+void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[],centrala centraleDetinute[4],centrala centraleDetinuteAltiJucatori[6][4],int &contorCenDet,int contorCenDetAltJuc[],int baniDentinuti,int baniDetAltiJucatori[5][1])
 {
-    int centPePiata, nAux = 0, centraleCump;
+    int centPePiata, nAux = 0, centraleCump, jucator;
     float auxSMC[45];
     char auxNum[45][45], aux2[255];
     centrala centraleInUz[9];
@@ -213,8 +213,26 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
         cout<<"Care centrala a fost cumparata?"<<endl;
         cin.getline(aux2,255);
         cout<<"Care jucator a cumparat centrala"<<endl;
+        cin>>jucator;
+        if(jucator==0){
+            centraleDetinute[contorCenDet] = centraleInUz[i];
+            baniDentinuti = baniDentinuti - centraleDetinute[contorCenDet].pret;
+            contorCenDet++;
+        }
+        else{
+            if(1<=jucator && jucator<=6){
+                centraleDetinute[jucator-1][contorCenDetAltJuc[jucator-1]] = centraleInUz[i];
+                baniDetAltiJucatori[jucator-1] = baniDetAltiJucatori[jucator-1] - centraleDetinute[jucator-1][contorCenDetAltJuc[jucator-1]];
+                contorCenDetAltJuc[jucator-1]++;
+            }
+            else{
+                SetConsoleTextAttribute(h, 4);
+                cout<<"Jucator necunoscut; for-ul se va repeta la final"<<endl;
+                i--;
+                SetConsoleTextAttribute(h, 15);
+            }
+        }
     }
-
 
 }
 
@@ -293,12 +311,13 @@ int main()
     int nrOrasPtVic = 18, nrOrasdetinut, nrOrasDetinutAltiJucatori[5][1] = {{0},{0},{0},{0},{0}};
     int orasPosbilAlimentare, orasPosbilAlimentareAltiJucatori[5][1] = {{0},{0},{0},{0},{0}};
     int numarOraseCuCentrale[7][1], baniDentinuti = 50, baniDetAltiJucatori[5][1] = {{50},{50},{50},{50},{50}};
-    centrala centraleDetinute[4], centraleDetinuteAltiJucatori[6][4];
+    int contorCenDet = 0,contorCenDetAltJuc[6]= {0};
+    centrala centraleDetinute[4], centraleDetinuteAltiJucatori[5][4];
     char combDetinut[100];
     //cout<<"Dati numarul de jucatori: ";
     //cin>>numarJucatori;
     citireCentrale(centrale);
-    citireCentraleInUz(centInUz,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
+    citireCentraleInUz(centInUz,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta,centraleDetinute,centraleDetinuteAltiJucatori,contorCenDet,contorCenDetAltJuc);
     //cataSchimbareCombustibil(numarJucatori,stage,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
     //citireHartaEU(hartaEuropa);
     //afisareHartaEu(hartaEuropa);
