@@ -101,7 +101,7 @@ void citireJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
         cin.ignore();
         cin.get(jucatori[i].nume, 255, '\n');
         toLower(jucatori[i].nume);
-        cout<<"Jucatorul "<<jucatori[i].nume<<" are numele: "<<jucatori[i].nume<<", corect?"<<endl;
+        cout<<"Jucatorul "<<i<<" are numele: "<<jucatori[i].nume<<", corect?"<<endl;
         cin.ignore();
         cin.get(aux2, 255, '\n');
         if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0){
@@ -236,9 +236,14 @@ void citireCentraleInUz(char centInUz[9],jucator_ user,jucator_ jucatori[],int &
     char auxNum[45][45];
     int aux2, aux3;
     centrala centraleInUz[9];
+    cout<<"Dati numarul de centrale ce se afla pe piata."<<endl;
     cin>>centPePiata;
     cin.ignore();
     for(int i=0; i<centPePiata; i++){
+        if(i+1!=1)
+            cout<<"Dati a"<<i+1<<"-a centrala: ";
+        else
+            cout<<"Dati prima centrala: ";
         cin.getline(centInUz, 9);
         for(int j=0; j<42; j++){
             if(strcmp(centrale[j].numeCen,centInUz)==0){
@@ -325,7 +330,8 @@ void citireCentraleInUz(char centInUz[9],jucator_ user,jucator_ jucatori[],int &
         cout<<"1) "<<user.nume<<" ";
         for(int j=0; j<nrJucatori; j++){
             SetConsoleTextAttribute(h, detectareCuloare(jucatori[i]));
-            cout<<j+2<<") "<<jucatori[j+2].nume<<" ";
+            cout<<j+2<<") "<<jucatori[j].nume<<" ";
+            SetConsoleTextAttribute(h, 15);
         }
         cin>>aux3;
         if(aux3==1){
@@ -490,10 +496,10 @@ int main()
     cin.ignore();
     cout<<"Care este oridnea user-ului?"<<endl;
     cin>>user.ordine;
-    cin.ignore();
+    //cin.ignore();
     citireJucatori(jucatori, numarJucatori, h);
-    //citireCentrale(centrale);
-    //citireCentraleInUz(centInUz,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta,centraleDetinute,centraleDetinuteAltiJucatori,contorCenDet,contorCenDetAltJuc,baniDentinuti,baniDetAltiJucatori);
+    citireCentrale(centrale);
+    citireCentraleInUz(centInUz,user,jucatori,numarJucatori,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
     //cataSchimbareCombustibil(numarJucatori,stage,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
     //citireHartaEU(hartaEuropa);
     //afisareHartaEu(hartaEuropa);
