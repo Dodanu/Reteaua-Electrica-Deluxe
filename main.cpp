@@ -206,14 +206,35 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
     }
     SetConsoleTextAttribute(h,15);
     for(int i=0; i<nAux; i++){
-        cout<<centraleInUz[i].numeCen<<" ";
+        if(strcmp(centraleInUz[i].numeComb,"C")==0){
+            SetConsoleTextAttribute(h, 6);
+        }
+        if(strcmp(centraleInUz[i].numeComb,"A")==0){
+            SetConsoleTextAttribute(h, 11);
+        }
+        if(strcmp(centraleInUz[i].numeComb,"P")==0){
+            SetConsoleTextAttribute(h, 8);
+        }
+        if(strcmp(centraleInUz[i].numeComb,"AP")==0){
+            SetConsoleTextAttribute(h, 3);
+        }
+        if(strcmp(centraleInUz[i].numeComb,"N")==0){
+            SetConsoleTextAttribute(h, 12);
+        }
+        if(strcmp(centraleInUz[i].numeComb,"E")==0){
+            SetConsoleTextAttribute(h, 2);
+        }
+        cout<<i+1<<") "<<centraleInUz[i].numeCen<<" ";
+        SetConsoleTextAttribute(h, 15);
     }
+    cout<<endl;
     cout<<"Cate centrale au fost cumparate?"<<endl;
     cin>>centraleCump;
     for(int i=0; i<centraleCump; i++){
         cout<<"Care centrala a fost cumparata?"<<endl;
         cin>>aux2;
-        cout<<"Care jucator a cumparat centrala"<<endl;
+        aux2 = aux2-1;
+        cout<<"Care jucator a cumparat centrala?"<<endl;
         cin>>jucator;
         if(jucator==0){
             centraleDetinute[contorCenDet] = centraleInUz[aux2];
@@ -223,8 +244,8 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
         else{
             if(1<=jucator && jucator<=6){
                 int auxCentDetAltJuc = contorCenDetAltJuc[jucator-1];
-                centraleDetinuteAltiJucatori[jucator-1][contorCenDetAltJuc[jucator-1]] = centraleInUz[aux2[255]];
-                baniDetAltiJucatori[jucator-1][0] = baniDetAltiJucatori[jucator-1] - &centraleDetinuteAltiJucatori[jucator-1][auxCentDetAltJuc].pret;
+                centraleDetinuteAltiJucatori[jucator-1][contorCenDetAltJuc[jucator-1]] = centraleInUz[aux2];
+                baniDetAltiJucatori[jucator-1][0] = baniDetAltiJucatori[jucator-1][0] - centraleDetinuteAltiJucatori[jucator-1][auxCentDetAltJuc].pret;
                 contorCenDetAltJuc[jucator-1]++;
             }
             else{
@@ -259,7 +280,6 @@ void cataSchimbareCombustibil(int nrJucatori,int stage,int cPreturi[][9],int cX,
     int resurseDeAdaug, n=4;
     for(int i=0; i<n; i++){
         switch(i){
-            cin.ignore();
             case 0:
                 cout<<"Cat carbune: ";
                 cin>>resurseDeAdaug;
