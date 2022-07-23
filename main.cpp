@@ -59,6 +59,7 @@ struct jucator_{
     int contorCenDet=0;
     int bani = 50;
     int ordine;
+    int nrOrase = 0;
 };
 
 //struct conex{
@@ -83,7 +84,14 @@ struct hartaEU{
     int j[13] = {6, 5, 4, 5, 5, 6, 4, 4, 3, 2, 2, 3};
 };
 
-void citireNumeJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
+void toLower(char txt[])
+{
+    for(int i=0; i<strlen(txt); i++){
+        txt[i] = tolower(txt[i]);
+    }
+}
+
+void citireJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
 {
     char aux2[255];
     cout<<"Cati jucatori sunt?"<<endl;
@@ -92,32 +100,34 @@ void citireNumeJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
         cout<<"Dati numele jucatorului "<<i<<": ";
         cin.ignore();
         cin.get(jucatori[i].nume, 255, '\n');
-        cout<<"Jucatorul "<<i<<" are numele: "<<jucatori[i].nume<<", corect?"<<endl;
+        toLower(jucatori[i].nume);
+        cout<<"Jucatorul "<<jucatori[i].nume<<" are numele: "<<jucatori[i].nume<<", corect?"<<endl;
         cin.ignore();
         cin.get(aux2, 255, '\n');
-        if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0)){
+        if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0){
             SetConsoleTextAttribute(h, 4);
             cout<<"Numele jucatorului a fost dat gresit, for-ul se va repeta la final cu acelasi indice."<<endl;
             i--;
         }
-        cout<<"Dati culoarea jucatorului "<<i<<": ";
+        cout<<"Dati culoarea lui "<<jucatori[i].nume<<": ";
         cin.ignore();
-        cin.get(jucatori[i].culoare, 255. '\n');
-        cout<<"Jucatorul "<<i<<" are culoarea: "<<jucatori[i].culoare<<", corect?"<<endl;
+        cin.get(jucatori[i].culoare, 255, '\n');
+        toLower(jucatori[i].culoare);
+        cout<<"Jucatorul "<<jucatori[i].nume<<" are culoarea: "<<jucatori[i].culoare<<", corect?"<<endl;
         cin.ignore();
         cin.get(aux2, 255, '\n');
-        if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0)){
+        if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0){
             SetConsoleTextAttribute(h, 4);
             cout<<"Culoarea jucatorului a fost data gresit, for-ul se va repeta la final cu acelasi indice."<<endl;
             i--;
         }
-        cout<<"Dati ordinea jucatorului "<<i<<": ";
+        cout<<"Dati ordinea lui "<<jucatori[i].nume<<": ";
         cin.ignore();
-        cin.get(jucatori[i].ordine, 255, '\n');
-        cout<<"Jucatorul "<<i<<" este la ordinea: "<<jucatori[i].ordine<<", corect?"<<endl;
+        cin>>jucatori[i].ordine;
+        cout<<"Jucatorul "<<jucatori[i].nume<<" este la ordinea: "<<jucatori[i].ordine<<", corect?"<<endl;
         cin.ignore();
         cin.get(aux2, 255, '\n');
-        if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0)){
+        if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0){
             SetConsoleTextAttribute(h, 4);
             cout<<"Ordinea jucatorului a fost data gresit, for-ul se va repeta la final cu acelasi indice."<<endl;
             i--;
@@ -151,6 +161,29 @@ void bubbleSort(float v[],int n)
             }
         }
     }
+}
+
+int detectareCuloare(jucator_ jucatori)
+{
+    if(strcmp(jucatori.culoare, "albastru")==0){
+        return 1;
+    }
+    if(strcmp(jucatori.culoare, "galben")==0){
+        return 14;
+    }
+    if(strcmp(jucatori.culoare, "rosu")==0){
+        return 4;
+    }
+    if(strcmp(jucatori.culoare, "verde")==0){
+        return 2;
+    }
+    if(strcmp(jucatori.culoare, "gri")==0){
+        return 8;
+    }
+    if(strcmp(jucatori.culoare, "mov")==0){
+        return 5;
+    }
+    return 15;
 }
 
 void afisareHartaEu(hartaEU hE)
@@ -288,22 +321,24 @@ void citireCentraleInUz(char centInUz[9],jucator_ user,jucator_ jucatori[],int &
         cin>>aux2;
         aux2 = aux2-1;
         cout<<"Care jucator a cumparat centrala?"<<endl;
+        SetConsoleTextAttribute(h, detectareCuloare(user));
         cout<<"1) "<<user.nume<<" ";
-        for(int j=0; j<numarJucatori; j++){
-            cout<<j+2<<") "<<jucatori.nume<<" ";
+        for(int j=0; j<nrJucatori; j++){
+            SetConsoleTextAttribute(h, detectareCuloare(jucatori[i]));
+            cout<<j+2<<") "<<jucatori[j+2].nume<<" ";
         }
-        cin>>jucator;
-        if(jucator==1){
-            user.centraleDetinute[contorCenDet] = centraleInUz[aux2];
-            user.bani = user.bani - user.centraleDetinute[contorCenDet].pret;
+        cin>>aux3;
+        if(aux3==1){
+            user.centraleDetinute[user.contorCenDet] = centraleInUz[aux2];
+            user.bani = user.bani - user.centraleDetinute[user.contorCenDet].pret;
             user.contorCenDet++;
         }
         else{
-            if(1<=jucator && jucator<=6){
+            if(1<=aux3 && aux3<=6){
 
-                jucatori.centraleDetinute[contorCenDet] = centraleInUz[aux2];
-                jucatori.bani = jucatori.bani - jucatori.centraleDetinute[contorCenDet].pret;
-                jucatori.contorCenDet++;
+                jucatori[aux3-2].centraleDetinute[jucatori[aux3-2].contorCenDet] = centraleInUz[aux2];
+                jucatori[aux3-2].bani = jucatori[aux3-2].bani - jucatori[aux3-2].centraleDetinute[jucatori[aux3-2].contorCenDet].pret;
+                jucatori[aux3-2].contorCenDet++;
             }
             else{
                 SetConsoleTextAttribute(h, 4);
@@ -415,7 +450,7 @@ void cataSchimbareCombustibil(int nrJucatori,int stage,int cPreturi[][9],int cX,
 
 void cumparareCombustibil(int stage,int numarJucatori,int &baniDentinuti,int baniDetAltiJucatori[][1],int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
-    
+
 }
 
 int main()
@@ -443,17 +478,22 @@ int main()
     int ePreturi[1][9] = {{0}};
     int eX=1, eY=1;
     int eMeta[3] = {10,10,10};
-    jucator_ user, jucatori[5]
-    user.nume = {"user"};
-    cout<<"Care este culoarea user-ului?"<<endl;
-    cin.ignore();
-    cin.get(user.culoare, 255, '\n');
-    cin.ignore();
     int nrOrasPtVic = 18, nrOrasdetinut, nrOrasDetinutAltiJucatori[5][1] = {{0},{0},{0},{0},{0}};
     int orasPosbilAlimentare, orasPosbilAlimentareAltiJucatori[5][1] = {{0},{0},{0},{0},{0}};
     int numarOraseCuCentrale[7][1];
-    citireCentrale(centrale);
-    citireCentraleInUz(centInUz,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta,centraleDetinute,centraleDetinuteAltiJucatori,contorCenDet,contorCenDetAltJuc,baniDentinuti,baniDetAltiJucatori);
+    jucator_ user, jucatori[5];
+    strcpy(user.nume, "user");
+    cout<<"Care este culoarea user-ului?"<<endl;
+    cin.ignore();
+    cin.get(user.culoare, 255, '\n');
+    toLower(user.culoare);
+    cin.ignore();
+    cout<<"Care este oridnea user-ului?"<<endl;
+    cin>>user.ordine;
+    cin.ignore();
+    citireJucatori(jucatori, numarJucatori, h);
+    //citireCentrale(centrale);
+    //citireCentraleInUz(centInUz,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta,centraleDetinute,centraleDetinuteAltiJucatori,contorCenDet,contorCenDetAltJuc,baniDentinuti,baniDetAltiJucatori);
     //cataSchimbareCombustibil(numarJucatori,stage,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
     //citireHartaEU(hartaEuropa);
     //afisareHartaEu(hartaEuropa);
