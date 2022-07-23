@@ -51,6 +51,16 @@ struct centrala{
     float SMC = 0;
 };
 
+struct jucator_{
+    char nume[255];
+    char culoare[255];
+    char combDetinut[4][1];
+    centrala centraleDetinute[3];
+    int contorCenDet=0;
+    int bani = 50;
+    int ordine;
+};
+
 //struct conex{
 //    string numeConex;
 //    int cordX;
@@ -72,6 +82,49 @@ struct hartaEU{
     int i = 13;
     int j[13] = {6, 5, 4, 5, 5, 6, 4, 4, 3, 2, 2, 3};
 };
+
+void citireNumeJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
+{
+    char aux2[255];
+    cout<<"Cati jucatori sunt?"<<endl;
+    cin>>nrJucatori;
+    for(int i=0; i<nrJucatori; i++){
+        cout<<"Dati numele jucatorului "<<i<<": ";
+        cin.ignore();
+        cin.get(jucatori[i].nume, 255, '\n');
+        cout<<"Jucatorul "<<i<<" are numele: "<<jucatori[i].nume<<", corect?"<<endl;
+        cin.ignore();
+        cin.get(aux2, 255, '\n');
+        if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0)){
+            SetConsoleTextAttribute(h, 4);
+            cout<<"Numele jucatorului a fost dat gresit, for-ul se va repeta la final cu acelasi indice."<<endl;
+            i--;
+        }
+        cout<<"Dati culoarea jucatorului "<<i<<": ";
+        cin.ignore();
+        cin.get(jucatori[i].culoare, 255. '\n');
+        cout<<"Jucatorul "<<i<<" are culoarea: "<<jucatori[i].culoare<<", corect?"<<endl;
+        cin.ignore();
+        cin.get(aux2, 255, '\n');
+        if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0)){
+            SetConsoleTextAttribute(h, 4);
+            cout<<"Culoarea jucatorului a fost data gresit, for-ul se va repeta la final cu acelasi indice."<<endl;
+            i--;
+        }
+        cout<<"Dati ordinea jucatorului "<<i<<": ";
+        cin.ignore();
+        cin.get(jucatori[i].ordine, 255, '\n');
+        cout<<"Jucatorul "<<i<<" este la ordinea: "<<jucatori[i].ordine<<", corect?"<<endl;
+        cin.ignore();
+        cin.get(aux2, 255, '\n');
+        if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0)){
+            SetConsoleTextAttribute(h, 4);
+            cout<<"Ordinea jucatorului a fost data gresit, for-ul se va repeta la final cu acelasi indice."<<endl;
+            i--;
+        }
+    }
+    SetConsoleTextAttribute(h, 15);
+}
 
 int gasirePrimPret(int preturi[][9],int x,int y)
 {
@@ -143,12 +196,12 @@ void citireCentrale(centrala centrale[])
     }
 }
 
-void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[],centrala centraleDetinute[],centrala centraleDetinuteAltiJucatori[][4],int &contorCenDet,int contorCenDetAltJuc[],int &baniDentinuti,int baniDetAltiJucatori[][1])
+void citireCentraleInUz(char centInUz[9],jucator_ user,jucator_ jucatori[],int &nrJucatori,int stage,centrala centrale[],HANDLE h,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
-    int centPePiata, nAux = 0, centraleCump, jucator;
+    int centPePiata, nAux = 0, centraleCump;
     float auxSMC[45];
     char auxNum[45][45];
-    int aux2;
+    int aux2, aux3;
     centrala centraleInUz[9];
     cin>>centPePiata;
     cin.ignore();
@@ -235,18 +288,22 @@ void citireCentraleInUz(char centInUz[9],int stage,centrala centrale[],HANDLE h,
         cin>>aux2;
         aux2 = aux2-1;
         cout<<"Care jucator a cumparat centrala?"<<endl;
+        cout<<"1) "<<user.nume<<" ";
+        for(int j=0; j<numarJucatori; j++){
+            cout<<j+2<<") "<<jucatori.nume<<" ";
+        }
         cin>>jucator;
-        if(jucator==0){
-            centraleDetinute[contorCenDet] = centraleInUz[aux2];
-            baniDentinuti = baniDentinuti - centraleDetinute[contorCenDet].pret;
-            contorCenDet++;
+        if(jucator==1){
+            user.centraleDetinute[contorCenDet] = centraleInUz[aux2];
+            user.bani = user.bani - user.centraleDetinute[contorCenDet].pret;
+            user.contorCenDet++;
         }
         else{
             if(1<=jucator && jucator<=6){
-                int auxCentDetAltJuc = contorCenDetAltJuc[jucator-1];
-                centraleDetinuteAltiJucatori[jucator-1][contorCenDetAltJuc[jucator-1]] = centraleInUz[aux2];
-                baniDetAltiJucatori[jucator-1][0] = baniDetAltiJucatori[jucator-1][0] - centraleDetinuteAltiJucatori[jucator-1][auxCentDetAltJuc].pret;
-                contorCenDetAltJuc[jucator-1]++;
+
+                jucatori.centraleDetinute[contorCenDet] = centraleInUz[aux2];
+                jucatori.bani = jucatori.bani - jucatori.centraleDetinute[contorCenDet].pret;
+                jucatori.contorCenDet++;
             }
             else{
                 SetConsoleTextAttribute(h, 4);
@@ -278,31 +335,87 @@ void schimbareCombustibil(int preturi[][9],int x,int y,int cateDeAdaug)
 void cataSchimbareCombustibil(int nrJucatori,int stage,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
     int resurseDeAdaug, n=4;
+    char raspuns[255];
+    bool automat = false;
+    //Comantariile sunt pentru procesul de automatizare, pe care nu il pot face deoarece nu gasesc pe net cu cat trebuie sa se umple resursele in plus, voi face mai incolo
+    /*
+    cout<<"Doriti ca acesta functie sa se intample automat?"<<endl;
+    cin.getline(raspuns, 255);
+    raspuns = tolower(raspuns);
+    if(strcmp(raspuns, "da")==0||strcmp(raspuns, "afirmativ")==0||strcmp(raspuns, "desigur")==0||strcmp(raspuns, "fireste")==0||strcmp(raspuns, "dar")==0||strcmp(raspuns, "helbet")==0){
+        automat = true;
+    }
+    */
     for(int i=0; i<n; i++){
         switch(i){
             case 0:
                 cout<<"Cat carbune: ";
+                /*
+                if(automat==true){
+                    switch(stage){
+                        case 1:
+                        case 2:
+                        case 3:
+                    }
+                }
+                else
+                */
                 cin>>resurseDeAdaug;
                 schimbareCombustibil(cPreturi, cX, cY, resurseDeAdaug);
                 break;
             case 1:
                 cout<<"Cata apa: ";
+                /*
+                if(automat==true){
+                    switch(stage){
+                        case 1:
+                        case 2:
+                        case 3:
+                    }
+                }
+                else
+                */
                 cin>>resurseDeAdaug;
                 schimbareCombustibil(aPreturi, aX, aY, resurseDeAdaug);
                 break;
             case 2:
                 cout<<"Cat petrol: ";
+                /*
+                if(automat==true){
+                    switch(stage){
+                        case 1:
+                        case 2:
+                        case 3:
+                    }
+                }
+                else
+                */
                 cin>>resurseDeAdaug;
                 schimbareCombustibil(pPreturi, pX, pY, resurseDeAdaug);
                 break;
             case 3:
                 cout<<"Cat uraniu: ";
+                /*
+                if(automat==true){
+                    switch(stage){
+                        case 1:
+                        case 2:
+                        case 3:
+                    }
+                }
+                else
+                */
                 cin>>resurseDeAdaug;
                 schimbareCombustibil(nPreturi, nX, nY, resurseDeAdaug);
                 break;
         }
 
     }
+}
+
+void cumparareCombustibil(int stage,int numarJucatori,int &baniDentinuti,int baniDetAltiJucatori[][1],int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
+{
+    
 }
 
 int main()
@@ -330,14 +443,15 @@ int main()
     int ePreturi[1][9] = {{0}};
     int eX=1, eY=1;
     int eMeta[3] = {10,10,10};
+    jucator_ user, jucatori[5]
+    user.nume = {"user"};
+    cout<<"Care este culoarea user-ului?"<<endl;
+    cin.ignore();
+    cin.get(user.culoare, 255, '\n');
+    cin.ignore();
     int nrOrasPtVic = 18, nrOrasdetinut, nrOrasDetinutAltiJucatori[5][1] = {{0},{0},{0},{0},{0}};
     int orasPosbilAlimentare, orasPosbilAlimentareAltiJucatori[5][1] = {{0},{0},{0},{0},{0}};
-    int numarOraseCuCentrale[7][1], baniDentinuti = 50, baniDetAltiJucatori[5][1] = {{50},{50},{50},{50},{50}};
-    int contorCenDet = 0,contorCenDetAltJuc[6]= {0};
-    centrala centraleDetinute[4], centraleDetinuteAltiJucatori[5][4];
-    char combDetinut[100];
-    //cout<<"Dati numarul de jucatori: ";
-    //cin>>numarJucatori;
+    int numarOraseCuCentrale[7][1];
     citireCentrale(centrale);
     citireCentraleInUz(centInUz,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta,centraleDetinute,centraleDetinuteAltiJucatori,contorCenDet,contorCenDetAltJuc,baniDentinuti,baniDetAltiJucatori);
     //cataSchimbareCombustibil(numarJucatori,stage,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
