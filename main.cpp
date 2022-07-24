@@ -54,7 +54,7 @@ struct centrala{
 struct jucator_{
     char nume[255];
     char culoare[255];
-    char combDetinut[4][1];
+    char combDetinut[4][1] = {0, 0, 0, 0};
     centrala centraleDetinute[3];
     int contorCenDet=0;
     int bani = 50;
@@ -97,11 +97,18 @@ void citireJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
     cout<<"Cati jucatori sunt?"<<endl;
     cin>>nrJucatori;
     for(int i=0; i<nrJucatori; i++){
-        cout<<"Dati numele jucatorului "<<i<<": ";
+        if(i!=0)
+            cout<<"Dati numele jucatorului "<<i<<": ";
+        else
+            cout<<"Dati numele user-ului: ";
         cin.ignore();
         cin.get(jucatori[i].nume, 255, '\n');
         toLower(jucatori[i].nume);
-        cout<<"Jucatorul "<<i<<" are numele: "<<jucatori[i].nume<<", corect?"<<endl;
+        if(i!=0)
+            cout<<"Jucatorul "<<i<<" are numele: "<<jucatori[i].nume<<", corect?"<<endl;
+        else{
+            cout<<"User-ul are numele: "<<jucatori[i].nume<<", corect?"<<endl;
+        }
         cin.ignore();
         cin.get(aux2, 255, '\n');
         if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0){
@@ -141,7 +148,7 @@ int gasirePrimPret(int preturi[][9],int x,int y)
     for(int i=0; i<x; i++){
         for(int j=0; j<y; j++){
             if(preturi[i][j]==1){
-                return i;
+                return i+1;
             }
         }
     }
@@ -229,7 +236,7 @@ void citireCentrale(centrala centrale[])
     }
 }
 
-void citireCentraleInUz(char centInUz[9],jucator_ user,jucator_ jucatori[],int &nrJucatori,int stage,centrala centrale[],HANDLE h,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
+void citireCentraleInUz(char centInUz[9],jucator_ jucatori[],int &nrJucatori,int stage,centrala centrale[],HANDLE h,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
     int centPePiata, nAux = 0, centraleCump;
     float auxSMC[45];
@@ -326,32 +333,22 @@ void citireCentraleInUz(char centInUz[9],jucator_ user,jucator_ jucatori[],int &
         cin>>aux2;
         aux2 = aux2-1;
         cout<<"Care jucator a cumparat centrala?"<<endl;
-        SetConsoleTextAttribute(h, detectareCuloare(user));
-        cout<<"1) "<<user.nume<<" ";
         for(int j=0; j<nrJucatori; j++){
             SetConsoleTextAttribute(h, detectareCuloare(jucatori[i]));
-            cout<<j+2<<") "<<jucatori[j].nume<<" ";
+            cout<<j+1<<") "<<jucatori[j].nume<<" ";
             SetConsoleTextAttribute(h, 15);
         }
         cin>>aux3;
-        if(aux3==1){
-            user.centraleDetinute[user.contorCenDet] = centraleInUz[aux2];
-            user.bani = user.bani - user.centraleDetinute[user.contorCenDet].pret;
-            user.contorCenDet++;
+        if(1<=aux3 && aux3<=6){
+            jucatori[aux3-1].centraleDetinute[jucatori[aux3-1].contorCenDet] = centraleInUz[aux2];
+            jucatori[aux3-1].bani = jucatori[aux3-1].bani - jucatori[aux3-1].centraleDetinute[jucatori[aux3-1].contorCenDet].pret;
+            jucatori[aux3-1].contorCenDet++;
         }
         else{
-            if(1<=aux3 && aux3<=6){
-
-                jucatori[aux3-2].centraleDetinute[jucatori[aux3-2].contorCenDet] = centraleInUz[aux2];
-                jucatori[aux3-2].bani = jucatori[aux3-2].bani - jucatori[aux3-2].centraleDetinute[jucatori[aux3-2].contorCenDet].pret;
-                jucatori[aux3-2].contorCenDet++;
-            }
-            else{
-                SetConsoleTextAttribute(h, 4);
-                cout<<"Jucator necunoscut; for-ul se va repeta la final"<<endl;
-                i--;
-                SetConsoleTextAttribute(h, 15);
-            }
+            SetConsoleTextAttribute(h, 4);
+            cout<<"Jucator necunoscut; for-ul se va repeta la final"<<endl;
+            i--;
+            SetConsoleTextAttribute(h, 15);
         }
     }
 
@@ -367,6 +364,22 @@ void schimbareCombustibil(int preturi[][9],int x,int y,int cateDeAdaug)
                 if(preturi[i][j]==0){
                     preturi[i][j] = 1;
                     cateDeAdaug--;
+                }
+            }
+        }
+    }
+}
+
+void eliminareCombustibil(int preturi[][9],int x,int y,int catDeElimin)
+{
+    for(int i=0; i<x; i++){
+        for(int j=0; j<y; j++){
+            if(cateDeElimin==0)
+                break;
+            else{
+                if(preturi[i][j]==1){
+                    preturi[i][j] = 0;
+                    cateDeElimin--;
                 }
             }
         }
@@ -454,9 +467,53 @@ void cataSchimbareCombustibil(int nrJucatori,int stage,int cPreturi[][9],int cX,
     }
 }
 
-void cumparareCombustibil(int stage,int numarJucatori,int &baniDentinuti,int baniDetAltiJucatori[][1],int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
+void cumparareCombustibil(int stage,int numarJucatori,jucator_ jucatori[],int &baniDentinuti,int baniDetAltiJucatori[][1],int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
-
+    bool automat = false, maxim = false;
+    char raspuns[255];
+    int deCump,aux;
+    SetConsoleTextAttribute(h, 14);
+    cout<<"Doriti ca acesta functie sa ruleze automat?"<<endl;
+    SetConsoleTextAttribute(h, 15);
+    cin.getline(raspuns, 255);
+    toLower(raspuns);
+    if(strcmp(raspuns, "da")==0||strcmp(raspuns, "afirmativ")==0||strcmp(raspuns, "desigur")==0||strcmp(raspuns, "fireste")==0||strcmp(raspuns, "dar")==0||strcmp(raspuns, "helbet")==0){
+        automat = true;
+    }
+    SetConsoleTextAttribute(h, 14);
+    cout<<"Doriti sa fie cumparat maxim de combustibil sau minim?"<<endl;
+    SetConsoleTextAttribute(h, 15);
+    if(strcmp(raspuns, "min")==0||strcmp(raspuns, "minim")==0){
+        maxim = false;
+    }
+    if(strcmp(raspuns, "max")==0||strcmp(raspuns, "maxim")==0){
+        maxim = false;
+    }
+    SetConsoleTextAttribute(h, 15);
+    for(int i=0; i<numarJucatori; i++){
+        for(int j=0; j<jucatori[i].contorCenDet; j++){
+            if(strcmp(centrale[j].numeComb,"C")==0){
+                aux = 0;
+            }
+            if(strcmp(centrale[j].numeComb,"A")==0){
+                aux = 1;
+            }
+            if(strcmp(centrale[j].numeComb,"P")==0){
+                aux = 2;
+            }
+            if(strcmp(centrale[j].numeComb,"AP")==0){
+                aux = 3;
+            }
+            if(strcmp(centrale[j].numeComb,"N")==0){
+                aux = 4;
+            }
+            if(automat==true){
+                if(maxim==false){
+                    deCump = jucatori[i].centraleDetinute[j].combNecesar -
+                }
+            }
+        }
+    }
 }
 
 int main()
@@ -487,15 +544,7 @@ int main()
     int nrOrasPtVic = 18, nrOrasdetinut, nrOrasDetinutAltiJucatori[5][1] = {{0},{0},{0},{0},{0}};
     int orasPosbilAlimentare, orasPosbilAlimentareAltiJucatori[5][1] = {{0},{0},{0},{0},{0}};
     int numarOraseCuCentrale[7][1];
-    jucator_ user, jucatori[5];
-    strcpy(user.nume, "user");
-    cout<<"Care este culoarea user-ului?"<<endl;
-    cin.ignore();
-    cin.get(user.culoare, 255, '\n');
-    toLower(user.culoare);
-    cin.ignore();
-    cout<<"Care este oridnea user-ului?"<<endl;
-    cin>>user.ordine;
+    jucator_ jucatori[6];
     //cin.ignore();
     citireJucatori(jucatori, numarJucatori, h);
     citireCentrale(centrale);
