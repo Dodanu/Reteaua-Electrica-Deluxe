@@ -379,11 +379,30 @@ void eliminareCombustibil(int preturi[][9],int x,int y,int catDeElimin)
             else{
                 if(preturi[i][j]==1){
                     preturi[i][j] = 0;
+                    pret = pret + i;
                     cateDeElimin--;
                 }
             }
         }
     }
+}
+
+void verificarePretComb(int preturi[][9],int x,int y,int cateVerificare)
+{
+    int pretFin = 0;
+    for(int i=0; i<x; i++){
+        for(int j=0; j<y; j++){
+            if(cateVerificare==0)
+                break;
+            else{
+                if(preturi[i][j]==1){
+                    pretFin = pretFin + i;
+                    cateVerificare--;
+                }
+            }
+        }
+    }
+    return pretFin;
 }
 
 void cataSchimbareCombustibil(int nrJucatori,int stage,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
@@ -469,9 +488,9 @@ void cataSchimbareCombustibil(int nrJucatori,int stage,int cPreturi[][9],int cX,
 
 void cumparareCombustibil(int stage,int numarJucatori,jucator_ jucatori[],int &baniDentinuti,int baniDetAltiJucatori[][1],int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
-    bool automat = false, maxim = false;
+    bool automat = false, maxim = false, faraBani = false;
     char raspuns[255];
-    int deCump,aux;
+    int deCump,aux,preturi;
     SetConsoleTextAttribute(h, 14);
     cout<<"Doriti ca acesta functie sa ruleze automat?"<<endl;
     SetConsoleTextAttribute(h, 15);
@@ -491,27 +510,71 @@ void cumparareCombustibil(int stage,int numarJucatori,jucator_ jucatori[],int &b
     }
     SetConsoleTextAttribute(h, 15);
     for(int i=0; i<numarJucatori; i++){
-        for(int j=0; j<jucatori[i].contorCenDet; j++){
-            if(strcmp(centrale[j].numeComb,"C")==0){
-                aux = 0;
+    preturi = 0;
+    faraBani = false;
+    for(int j=0; j<jucatori[i].contorCenDet; j++){
+        if(strcmp(centrale[j].numeComb,"C")==0){
+            aux = 0;
+        }
+        if(strcmp(centrale[j].numeComb,"A")==0){
+            aux = 1;
+        }
+        if(strcmp(centrale[j].numeComb,"P")==0){
+            aux = 2;
+        }
+        if(strcmp(centrale[j].numeComb,"N")==0){
+            aux = 3;
+        }
+        if(automat==true){
+            if(maxim == false)
+                deCump = jucatori[i].centraleDetinute[j].combNecesar - jucatori[i].combDetinut[aux][0];
+            else
+                deCump = 2*jucatori[i].centraleDetinute[j].combNecesar - jucatori[i].combDetinut[aux][0];
+            switch(aux) {
+                case 0:
+                    preturi = verificarePretComb(cPreturi, cX, cY, deCump);
+                    break;
+                case 1:
+                    preturi = verificarePretComb(aPreturi, aX, aY, deCump);
+                    break;
+                case 2:
+                    preturi = verificarePretComb(pPreturi, pX, pY, deCump);
+                    break;
+                case 3:
+                    preturi = verificarePretComb(nPreturi, nX, nY, deCump);
+                    break;
             }
-            if(strcmp(centrale[j].numeComb,"A")==0){
-                aux = 1;
+            if(preturi>jucatori[i].bani){
+                SetConsoleTextAttribute(h, 4);
+                cout<<"Eroare! ";
+                SetConsoleTextAttribute(h, 14);
+                cout<<"Jucatorul selectat nu are banii necesari pentru cumparea resurselor, aceasta iteratie a for-ului va incepe in mod manual!"<<endl;
+                SetConsoleTextAttribute(h, 15);
+                faraBani = true;
             }
-            if(strcmp(centrale[j].numeComb,"P")==0){
-                aux = 2;
-            }
-            if(strcmp(centrale[j].numeComb,"AP")==0){
-                aux = 3;
-            }
-            if(strcmp(centrale[j].numeComb,"N")==0){
-                aux = 4;
-            }
-            if(automat==true){
-                if(maxim==false){
-                    deCump = jucatori[i].centraleDetinute[j].combNecesar -
+            if(faraBani==false){
+                switch(aux) {
+                    case 0:
+                        eliminareCombustibil(cPreturi, cX, cY, deCump);
+                        break;
+                    case 1:
+                        eliminareCombustibil(aPreturi, aX, aY, deCump);
+                        break;
+                    case 2:
+                        eliminareCombustibil(pPreturi, pX, pY, deCump);
+                        break;
+                    case 3:
+                        eliminareCombustibil(nPreturi, nX, nY, deCump);
+                        break;
                 }
+                jucatori[i].bani = jucatori[i].bani - preturi;
+                jucatori[i].combDetinut[aux][0] = jucatori[i].combDetinut[aux][0] + deCump;
             }
+        }
+        if(automat==false || faraBani = true){
+            cout<<"Ce combustibil doreste "<<jucatori[i].nume<<" sa cumpere?"<<endl;
+            cin.ignore();
+            cin.getline(raspuns, 255);
         }
     }
 }
