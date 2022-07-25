@@ -11,3 +11,15 @@
 	<windows.h>
 	<time.h>
 
+1658745179 source:f:\github\reteaua-electrica-deluxe\main.cpp
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	<string.h>
+	<string>
+	<random>
+	<cstdlib>
+	<string>
+	<windows.h>
+	<time.h>
+
