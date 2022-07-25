@@ -36,7 +36,6 @@ ifstream ceNCin("centraleNumeCentrale.data"); //nume centrala
 ifstream heuNumin("hartaeu.map"); //nume orase
 ifstream heuNrConexin("harataeuNrConex.map");  //numar conex orase
 ifstream heuNumConexin("harataeuNumConex.map"); //nume orase la conex orase
-ifstream heuNrCen("hartaeuNrCen.map");   //cate cen pe orase
 ifstream heuCordX("hartaeuCordX.map");  //cord X conex orase
 ifstream heuCordY("hartaeuCordY.map");  //cord Y conex orase
 ifstream heuPretConex("hartaeuPretConex.map");  //pret conex orase
@@ -62,19 +61,20 @@ struct jucator_{
     int nrOrase = 0;
 };
 
-//struct conex{
-//    string numeConex;
-//    int cordX;
-//    int cordY;
-//    int pret;
-//    int nrCentrale;
-//};
+struct conex{
+    char numeConex[255];
+    int cordX;
+    int cordY;
+    int pret;
+    int nrCentrale;
+};
 
 struct oras{
     char numeOras[255];
-    //int nrCentrale;
-    //int nrConex;
-    //conex conexiuni[8];
+    char regiune[255];
+    int nrCentrale = 0;
+    int nrConex;
+    conex conexiuni[8];
 };
 
 struct hartaEU{
@@ -95,15 +95,21 @@ void afisareHartaEu(hartaEU hE)
     }
 }
 
-void citireHartaEU(hartaEU &hE)
+void citireNumeHartaEU(hartaEU &hE)
 {
     for(int a=0; a<hE.i; a++){
         for(int b=0; b<hE.j[a]; b++){
-            //int aux = hE.oX[a][b];
             heuNumin.getline(hE.orase[a][hE.oX[a][b]].numeOras, 255, '\n');
-            cout<<hE.oX[a][b]<<" "<<hE.orase[a][hE.oX[a][b]].numeOras<<" ";
         }
-        cout<<endl;
+    }
+}
+
+void citireNrConexHartaEu(hartaEU &hE)
+{
+    for(int a=0; a<hE.i; a++){
+        for(int b=0; b<hE.j[a]; b++){
+            cin>>hE.orase[a][hE.oX[a][b]].nrConex;
+        }
     }
 }
 
@@ -801,7 +807,8 @@ int main()
     //citireCentrale(centrale);
     //citireCentraleInUz(centInUz,jucatori,numarJucatori,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
     //cataSchimbareCombustibil(numarJucatori,stage,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
-    citireHartaEU(hartaEuropa);
-    afisareHartaEu(hartaEuropa);
+    citireNumeHartaEU(hartaEuropa);
+    citireNrConexHartaEu(hartaEuropa);
+    
     return 0;
 }

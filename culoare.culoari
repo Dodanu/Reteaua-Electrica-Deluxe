@@ -1,0 +1,35 @@
+Black            0           0
+Blue             1           1
+Green            2           2
+Cyan             3           3
+Red              4           4
+Magenta          5           5
+Brown            6           6
+White            7           7
+Gray             -           8
+Intense Blue     -           9
+Intense Green    -           10
+Intense Cyan     -           11
+Intense Red      -           12
+Intense Magenta  -           13
+Yellow           -           14
+Intense White    -           15
+
+if(strcmp(centraleInUz[i].numeComb,"C")==0){
+    SetConsoleTextAttribute(h, 6);
+}
+if(strcmp(centraleInUz[i].numeComb,"A")==0){
+    SetConsoleTextAttribute(h, 11);
+}
+if(strcmp(centraleInUz[i].numeComb,"P")==0){
+    SetConsoleTextAttribute(h, 8);
+}
+if(strcmp(centraleInUz[i].numeComb,"AP")==0){
+    SetConsoleTextAttribute(h, 3);
+}
+if(strcmp(centraleInUz[i].numeComb,"N")==0){
+    SetConsoleTextAttribute(h, 12);
+}
+if(strcmp(centraleInUz[i].numeComb,"E")==0){
+    SetConsoleTextAttribute(h, 2);
+}
