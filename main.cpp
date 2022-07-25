@@ -384,20 +384,19 @@ void eliminareCombustibil(int preturi[][9],int x,int y,int catDeElimin)
 {
     for(int i=0; i<x; i++){
         for(int j=0; j<y; j++){
-            if(cateDeElimin==0)
+            if(catDeElimin==0)
                 break;
             else{
                 if(preturi[i][j]==1){
                     preturi[i][j] = 0;
-                    pret = pret + i;
-                    cateDeElimin--;
+                    catDeElimin--;
                 }
             }
         }
     }
 }
 
-void verificarePretComb(int preturi[][9],int x,int y,int cateVerificare)
+int verificarePretComb(int preturi[][9],int x,int y,int cateVerificare)
 {
     int pretFin = 1;
     for(int i=0; i<x; i++){
@@ -496,7 +495,7 @@ void cataSchimbareCombustibil(int nrJucatori,int stage,int cPreturi[][9],int cX,
     }
 }
 
-void cumparareCombustibil(int stage,int numarJucatori,jucator_ jucatori[],int &baniDentinuti,int baniDetAltiJucatori[][1],int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
+void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori[],int &baniDentinuti,int baniDetAltiJucatori[][1],int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
     bool automat = false, maxim = false, faraBani = false, combGasit = false, greseala = false;
     char raspuns[255], raspuns2[255];
@@ -523,16 +522,16 @@ void cumparareCombustibil(int stage,int numarJucatori,jucator_ jucatori[],int &b
         preturi = 0;
         faraBani = false;
         for(int j=0; j<jucatori[i].contorCenDet; j++){
-            if(strcmp(centrale[j].numeComb,"C")==0){
+            if(strcmp(jucatori[i].centraleDetinute[j].numeComb,"C")==0){
                 aux = 0;
             }
-            if(strcmp(centrale[j].numeComb,"A")==0){
+            if(strcmp(jucatori[i].centraleDetinute[j].numeComb,"A")==0){
                 aux = 1;
             }
-            if(strcmp(centrale[j].numeComb,"P")==0){
+            if(strcmp(jucatori[i].centraleDetinute[j].numeComb,"P")==0){
                 aux = 2;
             }
-            if(strcmp(centrale[j].numeComb,"N")==0){
+            if(strcmp(jucatori[i].centraleDetinute[j].numeComb,"N")==0){
                 aux = 3;
             }
             if(automat==true){
@@ -581,7 +580,7 @@ void cumparareCombustibil(int stage,int numarJucatori,jucator_ jucatori[],int &b
                     jucatori[i].combDetinut[aux][0] = jucatori[i].combDetinut[aux][0] + deCump;
                 }
             }
-            if(automat==false || faraBani = true){
+            if(automat==false || faraBani==true){
                 cout<<"Cat combustibil doreste ";
                 SetConsoleTextAttribute(h, detectareCuloare(jucatori[i]));
                 cout<<jucatori[i].nume;
@@ -674,7 +673,7 @@ void cumparareCombustibil(int stage,int numarJucatori,jucator_ jucatori[],int &b
                     }
                     SetConsoleTextAttribute(h, 15);
                 }
-                if(strcmp(raspuns,"n")==0 || strcmp(raspuns,"nuclear")==0 strcmp(raspuns,"nucleara")==0){
+                if(strcmp(raspuns,"n")==0 || strcmp(raspuns,"nuclear")==0 || strcmp(raspuns,"nucleara")==0){
                     cin.ignore();
                     cout<<"Combustibilul care urmeaza sa fie cumparat este: ";
                     SetConsoleTextAttribute(h, 12);
@@ -745,7 +744,7 @@ int main()
     //cin.ignore();
     citireJucatori(jucatori, numarJucatori, h);
     citireCentrale(centrale);
-    citireCentraleInUz(centInUz,user,jucatori,numarJucatori,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
+    citireCentraleInUz(centInUz,jucatori,numarJucatori,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
     //cataSchimbareCombustibil(numarJucatori,stage,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
     //citireHartaEU(hartaEuropa);
     //afisareHartaEu(hartaEuropa);
