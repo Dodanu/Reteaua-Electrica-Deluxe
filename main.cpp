@@ -113,6 +113,8 @@ void citireJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
         cin.get(aux2, 255, '\n');
         if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0){
             SetConsoleTextAttribute(h, 4);
+            cout<<"⚠ Eroare!(0001) ";
+            SetConsoleTextAttribute(h, 14);
             cout<<"Numele jucatorului a fost dat gresit, for-ul se va repeta la final cu acelasi indice."<<endl;
             i--;
         }
@@ -125,6 +127,8 @@ void citireJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
         cin.get(aux2, 255, '\n');
         if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0){
             SetConsoleTextAttribute(h, 4);
+            cout<<"⚠ Eroare!(0002) ";
+            SetConsoleTextAttribute(h, 14);
             cout<<"Culoarea jucatorului a fost data gresit, for-ul se va repeta la final cu acelasi indice."<<endl;
             i--;
         }
@@ -136,9 +140,13 @@ void citireJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
         cin.get(aux2, 255, '\n');
         if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0){
             SetConsoleTextAttribute(h, 4);
+            cout<<"⚠ Eroare!(0003) ";
+            SetConsoleTextAttribute(h, 14);
             cout<<"Ordinea jucatorului a fost data gresit, for-ul se va repeta la final cu acelasi indice."<<endl;
+            SetConsoleTextAttribute(h, 15);
             i--;
         }
+        SetConsoleTextAttribute(h, 15);
     }
     SetConsoleTextAttribute(h, 15);
 }
@@ -346,7 +354,9 @@ void citireCentraleInUz(char centInUz[9],jucator_ jucatori[],int &nrJucatori,int
         }
         else{
             SetConsoleTextAttribute(h, 4);
-            cout<<"Jucator necunoscut; for-ul se va repeta la final"<<endl;
+            cout<<"⚠ Eroare!(0004) ";
+            SetConsoleTextAttribute(h, 14);
+            cout<<"Jucator necunoscut, for-ul se va repeta la final"<<endl;
             i--;
             SetConsoleTextAttribute(h, 15);
         }
@@ -389,7 +399,7 @@ void eliminareCombustibil(int preturi[][9],int x,int y,int catDeElimin)
 
 void verificarePretComb(int preturi[][9],int x,int y,int cateVerificare)
 {
-    int pretFin = 0;
+    int pretFin = 1;
     for(int i=0; i<x; i++){
         for(int j=0; j<y; j++){
             if(cateVerificare==0)
@@ -437,7 +447,7 @@ void cataSchimbareCombustibil(int nrJucatori,int stage,int cPreturi[][9],int cX,
                 schimbareCombustibil(cPreturi, cX, cY, resurseDeAdaug);
                 break;
             case 1:
-                cout<<"Cata apa: ";
+                cout<<"Cat gaz: ";
                 /*
                 if(automat==true){
                     switch(stage){
@@ -488,8 +498,8 @@ void cataSchimbareCombustibil(int nrJucatori,int stage,int cPreturi[][9],int cX,
 
 void cumparareCombustibil(int stage,int numarJucatori,jucator_ jucatori[],int &baniDentinuti,int baniDetAltiJucatori[][1],int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
-    bool automat = false, maxim = false, faraBani = false;
-    char raspuns[255];
+    bool automat = false, maxim = false, faraBani = false, combGasit = false, greseala = false;
+    char raspuns[255], raspuns2[255];
     int deCump,aux,preturi;
     SetConsoleTextAttribute(h, 14);
     cout<<"Doriti ca acesta functie sa ruleze automat?"<<endl;
@@ -510,71 +520,195 @@ void cumparareCombustibil(int stage,int numarJucatori,jucator_ jucatori[],int &b
     }
     SetConsoleTextAttribute(h, 15);
     for(int i=0; i<numarJucatori; i++){
-    preturi = 0;
-    faraBani = false;
-    for(int j=0; j<jucatori[i].contorCenDet; j++){
-        if(strcmp(centrale[j].numeComb,"C")==0){
-            aux = 0;
-        }
-        if(strcmp(centrale[j].numeComb,"A")==0){
-            aux = 1;
-        }
-        if(strcmp(centrale[j].numeComb,"P")==0){
-            aux = 2;
-        }
-        if(strcmp(centrale[j].numeComb,"N")==0){
-            aux = 3;
-        }
-        if(automat==true){
-            if(maxim == false)
-                deCump = jucatori[i].centraleDetinute[j].combNecesar - jucatori[i].combDetinut[aux][0];
-            else
-                deCump = 2*jucatori[i].centraleDetinute[j].combNecesar - jucatori[i].combDetinut[aux][0];
-            switch(aux) {
-                case 0:
-                    preturi = verificarePretComb(cPreturi, cX, cY, deCump);
-                    break;
-                case 1:
-                    preturi = verificarePretComb(aPreturi, aX, aY, deCump);
-                    break;
-                case 2:
-                    preturi = verificarePretComb(pPreturi, pX, pY, deCump);
-                    break;
-                case 3:
-                    preturi = verificarePretComb(nPreturi, nX, nY, deCump);
-                    break;
+        preturi = 0;
+        faraBani = false;
+        for(int j=0; j<jucatori[i].contorCenDet; j++){
+            if(strcmp(centrale[j].numeComb,"C")==0){
+                aux = 0;
             }
-            if(preturi>jucatori[i].bani){
-                SetConsoleTextAttribute(h, 4);
-                cout<<"Eroare! ";
-                SetConsoleTextAttribute(h, 14);
-                cout<<"Jucatorul selectat nu are banii necesari pentru cumparea resurselor, aceasta iteratie a for-ului va incepe in mod manual!"<<endl;
-                SetConsoleTextAttribute(h, 15);
-                faraBani = true;
+            if(strcmp(centrale[j].numeComb,"A")==0){
+                aux = 1;
             }
-            if(faraBani==false){
+            if(strcmp(centrale[j].numeComb,"P")==0){
+                aux = 2;
+            }
+            if(strcmp(centrale[j].numeComb,"N")==0){
+                aux = 3;
+            }
+            if(automat==true){
+                if(maxim == false)
+                    deCump = jucatori[i].centraleDetinute[j].combNecesar - jucatori[i].combDetinut[aux][0];
+                else
+                    deCump = 2*jucatori[i].centraleDetinute[j].combNecesar - jucatori[i].combDetinut[aux][0];
                 switch(aux) {
                     case 0:
-                        eliminareCombustibil(cPreturi, cX, cY, deCump);
+                        preturi = verificarePretComb(cPreturi, cX, cY, deCump);
                         break;
                     case 1:
-                        eliminareCombustibil(aPreturi, aX, aY, deCump);
+                        preturi = verificarePretComb(aPreturi, aX, aY, deCump);
                         break;
                     case 2:
-                        eliminareCombustibil(pPreturi, pX, pY, deCump);
+                        preturi = verificarePretComb(pPreturi, pX, pY, deCump);
                         break;
                     case 3:
-                        eliminareCombustibil(nPreturi, nX, nY, deCump);
+                        preturi = verificarePretComb(nPreturi, nX, nY, deCump);
                         break;
                 }
-                jucatori[i].bani = jucatori[i].bani - preturi;
-                jucatori[i].combDetinut[aux][0] = jucatori[i].combDetinut[aux][0] + deCump;
+                if(preturi>jucatori[i].bani){
+                    SetConsoleTextAttribute(h, 4);
+                    cout<<"⚠ Eroare!(0005) ";
+                    SetConsoleTextAttribute(h, 14);
+                    cout<<"Jucatorul selectat nu are banii necesari pentru cumparea resurselor, aceasta iteratie a for-ului va incepe in mod manual!"<<endl;
+                    SetConsoleTextAttribute(h, 15);
+                    faraBani = true;
+                }
+                if(faraBani==false){
+                    switch(aux) {
+                        case 0:
+                            eliminareCombustibil(cPreturi, cX, cY, deCump);
+                            break;
+                        case 1:
+                            eliminareCombustibil(aPreturi, aX, aY, deCump);
+                            break;
+                        case 2:
+                            eliminareCombustibil(pPreturi, pX, pY, deCump);
+                            break;
+                        case 3:
+                            eliminareCombustibil(nPreturi, nX, nY, deCump);
+                            break;
+                    }
+                    jucatori[i].bani = jucatori[i].bani - preturi;
+                    jucatori[i].combDetinut[aux][0] = jucatori[i].combDetinut[aux][0] + deCump;
+                }
             }
-        }
-        if(automat==false || faraBani = true){
-            cout<<"Ce combustibil doreste "<<jucatori[i].nume<<" sa cumpere?"<<endl;
-            cin.ignore();
-            cin.getline(raspuns, 255);
+            if(automat==false || faraBani = true){
+                cout<<"Cat combustibil doreste ";
+                SetConsoleTextAttribute(h, detectareCuloare(jucatori[i]));
+                cout<<jucatori[i].nume;
+                SetConsoleTextAttribute(h, 15);
+                cout<<" sa cumpere?"<<endl;
+                cin>>deCump;
+                cout<<"Ce combustibil doreste ";
+                SetConsoleTextAttribute(h, detectareCuloare(jucatori[i]));
+                cout<<jucatori[i].nume;
+                SetConsoleTextAttribute(h, 15);
+                cout<<" sa cumpere?"<<endl;
+                cin.ignore();
+                cin.getline(raspuns, 255);
+                toLower(raspuns);
+                if(strcmp(raspuns,"c")==0 || strcmp(raspuns,"carbune")==0 || strcmp(raspuns,"asteorizi")==0){
+                    cin.ignore();
+                    cout<<"Combustibilul care urmeaza sa fie cumparat este: ";
+                    SetConsoleTextAttribute(h, 6);
+                    cout<<"carbune";
+                    SetConsoleTextAttribute(h, 15);
+                    cout<<", corect?"<<endl;
+                    cin.getline(raspuns2, 255);
+                    toLower(raspuns2);
+                    if(strcmp(raspuns2, "nu")==0||strcmp(raspuns2, "negativ")==0||strcmp(raspuns2, "nicidecum")==0||strcmp(raspuns2, "deloc")==0||strcmp(raspuns2, "exclus")==0||strcmp(raspuns2, "nup")==0||strcmp(raspuns2, "de niciun fel")==0){
+                        greseala = true;
+                        SetConsoleTextAttribute(h, 4);
+                        cout<<"⚠ Eroare!(0006) ";
+                        SetConsoleTextAttribute(h, 14);
+                        cout<<"Combustibilul a fost selectat gresit! For-ul se va repeta la finalul iteratiei cu acelasi indice."<<endl;
+                        i--;
+                        SetConsoleTextAttribute(h, 15);
+                    }
+                    else{
+                        jucatori[i].bani = jucatori[i].bani - verificarePretComb(cPreturi, cX, cY, deCump);
+                        jucatori[i].combDetinut[0][0] = jucatori[i].combDetinut[0][0] + deCump;
+                        eliminareCombustibil(cPreturi, cX, cY, deCump);
+                        combGasit = true;
+                    }
+                    SetConsoleTextAttribute(h, 15);
+                }
+                if(strcmp(raspuns,"a")==0 || strcmp(raspuns,"apa")==0 || strcmp(raspuns,"gaz")==0 ){
+                    cin.ignore();
+                    cout<<"Combustibilul care urmeaza sa fie cumparat este: ";
+                    SetConsoleTextAttribute(h, 11);
+                    cout<<"gaz";
+                    SetConsoleTextAttribute(h, 15);
+                    cout<<", corect?"<<endl;
+                    cin.getline(raspuns2, 255);
+                    toLower(raspuns2);
+                    if(strcmp(raspuns2, "nu")==0||strcmp(raspuns2, "negativ")==0||strcmp(raspuns2, "nicidecum")==0||strcmp(raspuns2, "deloc")==0||strcmp(raspuns2, "exclus")==0||strcmp(raspuns2, "nup")==0||strcmp(raspuns2, "de niciun fel")==0){
+                        greseala = true;
+                        SetConsoleTextAttribute(h, 4);
+                        cout<<"⚠ Eroare!(0006) ";
+                        SetConsoleTextAttribute(h, 14);
+                        cout<<"Combustibilul a fost selectat gresit! For-ul se va repeta la finalul iteratiei cu acelasi indice."<<endl;
+                        i--;
+                        SetConsoleTextAttribute(h, 15);
+                    }
+                    else{
+                        jucatori[i].bani = jucatori[i].bani - verificarePretComb(aPreturi, aX, aY, deCump);
+                        jucatori[i].combDetinut[1][0] = jucatori[i].combDetinut[1][0] + deCump;
+                        eliminareCombustibil(aPreturi, aX, aY, deCump);
+                        combGasit = true;
+                    }
+                    SetConsoleTextAttribute(h, 15);
+                }
+                if(strcmp(raspuns,"p")==0 || strcmp(raspuns,"petrol")==0 || strcmp(raspuns,"petro")==0 ){
+                    cin.ignore();
+                    cout<<"Combustibilul care urmeaza sa fie cumparat este: ";
+                    SetConsoleTextAttribute(h, 8);
+                    cout<<"petrol";
+                    SetConsoleTextAttribute(h, 15);
+                    cout<<", corect?"<<endl;
+                    cin.getline(raspuns2, 255);
+                    toLower(raspuns2);
+                    if(strcmp(raspuns2, "nu")==0||strcmp(raspuns2, "negativ")==0||strcmp(raspuns2, "nicidecum")==0||strcmp(raspuns2, "deloc")==0||strcmp(raspuns2, "exclus")==0||strcmp(raspuns2, "nup")==0||strcmp(raspuns2, "de niciun fel")==0){
+                        greseala = true;
+                        SetConsoleTextAttribute(h, 4);
+                        cout<<"⚠ Eroare!(0006) ";
+                        SetConsoleTextAttribute(h, 14);
+                        cout<<"Combustibilul a fost selectat gresit! For-ul se va repeta la finalul iteratiei cu acelasi indice."<<endl;
+                        i--;
+                        SetConsoleTextAttribute(h, 15);
+                    }
+                    else{
+                        jucatori[i].bani = jucatori[i].bani - verificarePretComb(pPreturi, pX, pY, deCump);
+                        jucatori[i].combDetinut[2][0] = jucatori[i].combDetinut[2][0] + deCump;
+                        eliminareCombustibil(pPreturi, pX, pY, deCump);
+                        combGasit = true;
+                    }
+                    SetConsoleTextAttribute(h, 15);
+                }
+                if(strcmp(raspuns,"n")==0 || strcmp(raspuns,"nuclear")==0 strcmp(raspuns,"nucleara")==0){
+                    cin.ignore();
+                    cout<<"Combustibilul care urmeaza sa fie cumparat este: ";
+                    SetConsoleTextAttribute(h, 12);
+                    cout<<"uraniu";
+                    SetConsoleTextAttribute(h, 15);
+                    cout<<", corect?"<<endl;
+                    cin.getline(raspuns2, 255);
+                    toLower(raspuns2);
+                    if(strcmp(raspuns2, "nu")==0||strcmp(raspuns2, "negativ")==0||strcmp(raspuns2, "nicidecum")==0||strcmp(raspuns2, "deloc")==0||strcmp(raspuns2, "exclus")==0||strcmp(raspuns2, "nup")==0||strcmp(raspuns2, "de niciun fel")==0){
+                        greseala = true;
+                        SetConsoleTextAttribute(h, 4);
+                        cout<<"⚠ Eroare!(0006) ";
+                        SetConsoleTextAttribute(h, 14);
+                        cout<<"Combustibilul a fost selectat gresit! For-ul se va repeta la finalul iteratiei cu acelasi indice."<<endl;
+                        i--;
+                        SetConsoleTextAttribute(h, 15);
+                    }
+                    else{
+                        jucatori[i].bani = jucatori[i].bani - verificarePretComb(nPreturi, nX, nY, deCump);
+                        jucatori[i].combDetinut[3][0] = jucatori[i].combDetinut[3][0] + deCump;
+                        eliminareCombustibil(nPreturi, nX, nY, deCump);
+                        combGasit = true;
+                    }
+                    SetConsoleTextAttribute(h, 15);
+                }
+                if(combGasit==false){
+                    SetConsoleTextAttribute(h, 4);
+                    cout<<"⚠ Eroare!(0007)";
+                    SetConsoleTextAttribute(h, 14);
+                    cout<<" Combustibilul cautat nu a fost gasit/nu exista, aceasta iteratie a for-ului se va repeta la final cu acelasi indice."<<endl;
+                    i--;
+                    SetConsoleTextAttribute;
+                }
+            }
         }
     }
 }
