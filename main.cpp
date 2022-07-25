@@ -166,12 +166,12 @@ void sortareOrdineJucatori(int nrJucatori,jucator_ jucatori[])
             }
             if(jucatori[i].nrOrase==jucatori[i+1].nrOrase){
                 if(jucatori[i].nrOrase==jucatori[i+1].nrOrase){
-                    inr cenMax1 = 0, cenMax2 = 0;
-                    for(int j=0; j<jucatori[i].nrCentrale; j++){
+                    int cenMax1 = 0, cenMax2 = 0;
+                    for(int j=0; j<jucatori[i].contorCenDet; j++){
                         if(cenMax1 < jucatori[i].centraleDetinute[j].orase)
                             cenMax1 = jucatori[i].centraleDetinute[j].orase;
                     }
-                    for(int j=0; j<jucatori[i+1].nrCentrale; j++){
+                    for(int j=0; j<jucatori[i+1].contorCenDet; j++){
                         if(cenMax2 < jucatori[i+1].centraleDetinute[j].orase)
                             cenMax2 = jucatori[i+1].centraleDetinute[j].orase;
                     }
@@ -191,7 +191,7 @@ void sortareOrdineJucatori(int nrJucatori,jucator_ jucatori[])
                             terminat = false;
                         }
                         if(jucatori[i].bani==jucatori[i+1].bani){
-                            if(jucatori[i].nrCentrale<jucatori[i+1].nrCentrale){
+                            if(jucatori[i].contorCenDet<jucatori[i+1].contorCenDet){
                                 jucator_ aux;
                                 aux = jucatori[i];
                                 jucatori[i] = jucatori[i+1];
