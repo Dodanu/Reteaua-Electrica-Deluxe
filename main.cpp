@@ -151,6 +151,61 @@ void citireJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
     SetConsoleTextAttribute(h, 15);
 }
 
+void sortareOrdineJucatori(int nrJucatori,jucator_ jucatori[])
+{
+    bool terminat = false;
+    while(!terminat){
+        terminat = true;
+        for(int i=0; i<nrJucatori; i++){
+            if(jucatori[i].nrOrase<jucatori[i+1].nrOrase){
+                jucator_ aux;
+                aux = jucatori[i];
+                jucatori[i] = jucatori[i+1];
+                jucatori[i+1] = aux;
+                terminat = false;
+            }
+            if(jucatori[i].nrOrase==jucatori[i+1].nrOrase){
+                if(jucatori[i].nrOrase==jucatori[i+1].nrOrase){
+                    inr cenMax1 = 0, cenMax2 = 0;
+                    for(int j=0; j<jucatori[i].nrCentrale; j++){
+                        if(cenMax1 < jucatori[i].centraleDetinute[j].orase)
+                            cenMax1 = jucatori[i].centraleDetinute[j].orase;
+                    }
+                    for(int j=0; j<jucatori[i+1].nrCentrale; j++){
+                        if(cenMax2 < jucatori[i+1].centraleDetinute[j].orase)
+                            cenMax2 = jucatori[i+1].centraleDetinute[j].orase;
+                    }
+                    if(cenMax1 < cenMax2){
+                        jucator_ aux;
+                        aux = jucatori[i];
+                        jucatori[i] = jucatori[i+1];
+                        jucatori[i+1] = aux;
+                        terminat = false;
+                    }
+                    if(cenMax1==cenMax2){
+                        if(jucatori[i].bani<jucatori[i+1].bani){
+                            jucator_ aux;
+                            aux = jucatori[i];
+                            jucatori[i] = jucatori[i+1];
+                            jucatori[i+1] = aux;
+                            terminat = false;
+                        }
+                        if(jucatori[i].bani==jucatori[i+1].bani){
+                            if(jucatori[i].nrCentrale<jucatori[i+1].nrCentrale){
+                                jucator_ aux;
+                                aux = jucatori[i];
+                                jucatori[i] = jucatori[i+1];
+                                jucatori[i+1] = aux;
+                                terminat = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 int gasirePrimPret(int preturi[][9],int x,int y)
 {
     for(int i=0; i<x; i++){
@@ -518,7 +573,7 @@ void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori
         maxim = false;
     }
     SetConsoleTextAttribute(h, 15);
-    for(int i=0; i<numarJucatori; i++){
+    for(int i=numarJucatori-1; i>=0; i--){
         preturi = 0;
         faraBani = false;
         for(int j=0; j<jucatori[i].contorCenDet; j++){
