@@ -36,8 +36,6 @@ ifstream ceNCin("centraleNumeCentrale.data"); //nume centrala
 ifstream heuNumin("hartaeu.map"); //nume orase
 ifstream heuNrConexin("harataeuNrConex.map");  //numar conex orase
 ifstream heuNumConexin("harataeuNumConex.map"); //nume orase la conex orase
-ifstream heuCordX("hartaeuCordX.map");  //cord X conex orase
-ifstream heuCordY("hartaeuCordY.map");  //cord Y conex orase
 ifstream heuPretConex("hartaeuPretConex.map");  //pret conex orase
 ifstream heuCJCO("hartaeuCJCO.map"); //ce jucator detine centrala pe oras orase
 
@@ -86,10 +84,18 @@ struct hartaEU{
 
 void afisareHartaEu(hartaEU hE)
 {
+    int nrOras=0, nrConex = 1;
     for(int a=0; a<hE.i; a++){
         for(int b=0; b<hE.j[a]; b++){
-            cout<<hE.oX[a][b]<<" ";
-            cout<<hE.orase[a][hE.oX[a][b]].numeOras<<" ";
+            //cout<<hE.oX[a][b]<<" ";
+            //cout<<nrOras<<" ";
+            cout<<hE.orase[a][hE.oX[a][b]].numeOras<<endl;
+            for(int c=0; c<hE.orase[a][hE.oX[a][b]].nrConex; c++){
+                cout<<nrConex<<"     "<<hE.orase[a][hE.oX[a][b]].conexiuni[c].numeConex<<endl;
+                nrConex++;
+            }
+            //nrOras++;
+            //cout<<hE.orase[a][hE.oX[a][b]].nrConex<<" ";
         }
         cout<<endl;
     }
@@ -108,9 +114,23 @@ void citireNrConexHartaEu(hartaEU &hE)
 {
     for(int a=0; a<hE.i; a++){
         for(int b=0; b<hE.j[a]; b++){
-            cin>>hE.orase[a][hE.oX[a][b]].nrConex;
+            heuNrConexin>>hE.orase[a][hE.oX[a][b]].nrConex;
         }
     }
+}
+
+void citireNumeConexHarta(hartaEU &hE)
+{
+    int numarConexTotal = 0;
+    for(int a=0; a<hE.i; a++){
+        for(int b=0; b<hE.j[a]; b++){
+            for(int c=0; c<hE.orase[a][hE.oX[a][b]].nrConex; c++){
+                heuNumConexin.getline(hE.orase[a][hE.oX[a][b]].conexiuni[c].numeConex, 255, '\n');
+                numarConexTotal++;
+            }
+        }
+    }
+    cout<<numarConexTotal<<endl;
 }
 
 void toLower(char txt[])
@@ -809,6 +829,7 @@ int main()
     //cataSchimbareCombustibil(numarJucatori,stage,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
     citireNumeHartaEU(hartaEuropa);
     citireNrConexHartaEu(hartaEuropa);
-    
+    citireNumeConexHarta(hartaEuropa);
+    afisareHartaEu(hartaEuropa);
     return 0;
 }
