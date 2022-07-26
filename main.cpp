@@ -84,17 +84,17 @@ struct hartaEU{
 
 void afisareHartaEu(hartaEU hE)
 {
-    int nrOras=0, nrConex = 1;
+    int nrOras=1, nrConex = 1;
     for(int a=0; a<hE.i; a++){
         for(int b=0; b<hE.j[a]; b++){
             //cout<<hE.oX[a][b]<<" ";
-            //cout<<nrOras<<" ";
+            cout<<nrOras<<" ";
             cout<<hE.orase[a][hE.oX[a][b]].numeOras<<endl;
             for(int c=0; c<hE.orase[a][hE.oX[a][b]].nrConex; c++){
                 cout<<nrConex<<"     "<<hE.orase[a][hE.oX[a][b]].conexiuni[c].numeConex<<endl;
                 nrConex++;
             }
-            //nrOras++;
+            nrOras++;
             //cout<<hE.orase[a][hE.oX[a][b]].nrConex<<" ";
         }
         cout<<endl;
