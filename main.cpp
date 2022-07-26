@@ -82,6 +82,13 @@ struct hartaEU{
     int j[13] = {6, 5, 4, 5, 5, 6, 4, 4, 3, 2, 2, 3};
 };
 
+void toLower(char txt[])
+{
+    for(int i=0; i<strlen(txt); i++){
+        txt[i] = tolower(txt[i]);
+    }
+}
+
 void afisareHartaEu(hartaEU hE)
 {
     int nrOras=1, nrConex = 1;
@@ -130,13 +137,30 @@ void citireNumeConexHarta(hartaEU &hE)
             }
         }
     }
-    cout<<numarConexTotal<<endl;
 }
 
-void toLower(char txt[])
+void calcaulareConexiuniOrase(hartaEU &hE)
 {
-    for(int i=0; i<strlen(txt); i++){
-        txt[i] = tolower(txt[i]);
+    int auxI, auxJ;
+    for(int a=0; a<hE.i; a++){
+        for(int b=0; b<hE.j[a]; b++){
+            for(int c=0; c<hE.orase[a][hE.oX[a][b]].nrConex; c++){
+                for(int c=0; c<hE.orase[a][hE.oX[a][b]].nrConex; c++){
+                    for(int d=0; d<hE.i; d++){
+                        for(int f=0; f<hE.j[a]; f++){
+                            if(strcmp(hE.orase[a][hE.oX[a][b]].conexiuni[c].numeConex,hE.orase[d][hE.oX[d][f]].numeOras)==0){
+                                auxI = d;
+                                auxJ = f;
+                                d = hE.i;
+                                f=hE.j[a];
+                            }
+                        }
+                    }
+                    hE.orase[a][hE.oX[a][b]].conexiuni[c].cordX = a - auxJ;
+                    hE.orase[a][hE.oX[a][b]].conexiuni[c].cordY = hE.oX[a][b] - auxI;
+                }
+            }
+        }
     }
 }
 
@@ -830,6 +854,6 @@ int main()
     citireNumeHartaEU(hartaEuropa);
     citireNrConexHartaEu(hartaEuropa);
     citireNumeConexHarta(hartaEuropa);
-    afisareHartaEu(hartaEuropa);
+    //afisareHartaEu(hartaEuropa);
     return 0;
 }
