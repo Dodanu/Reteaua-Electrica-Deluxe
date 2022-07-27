@@ -417,52 +417,68 @@ void citireCentrale(centrala centrale[])
     }
 }
 
-void recomandareCumparareCentrale(jucator_ jucatori,int stage,int nrJucatori,HANDLE h)
+void recomandareDacaCumparareCentrale(jucator_ jucatori[],int stage,int nrJucatori,HANDLE h,int indiceJucator)
 {
     float SMR = 0;
-    if(jucatori.orasePosbilAlimentare < jucatori.nrOrase)
+    if(jucatori[indiceJucator].orasePosbilAlimentare < jucatori[indiceJucator].nrOrase)
         SMR = SMR + 1;
-    if(jucatori.orasePosbilAlimentare > jucatori.nrOrase)
+    if(jucatori[indiceJucator].orasePosbilAlimentare > jucatori[indiceJucator].nrOrase)
         SMR = SMR - 0.5;
-    if(jucatori.orasePosbilAlimentare==0)
+    if(jucatori[indiceJucator].orasePosbilAlimentare==0)
         SMR = SMR + 10;
     if(stage==1){
-        if(jucatori.orasePosbilAlimentare==6 || jucatori.orasePosbilAlimentare==7)
+        if(jucatori[indiceJucator].orasePosbilAlimentare==6 || jucatori[indiceJucator].orasePosbilAlimentare==7)
             SMR = SMR + 1;
-        if(jucatori.orasePosbilAlimentare<=5 && 3<=jucatori.orasePosbilAlimentare)
+        if(jucatori[indiceJucator].orasePosbilAlimentare<=5 && 3<=jucatori[indiceJucator].orasePosbilAlimentare)
             SMR = SMR + 1.5;
-        if(jucatori.orasePosbilAlimentare<3 && 1<=jucatori.orasePosbilAlimentare)
+        if(jucatori[indiceJucator].orasePosbilAlimentare<3 && 1<=jucatori[indiceJucator].orasePosbilAlimentare)
             SMR = SMR + 5;
     }
     if(stage==2){
-        if(12<jucatori.orasePosbilAlimentare)
+        if(12<jucatori[indiceJucator].orasePosbilAlimentare)
             SMR = SMR + 0.5;
-        if(10<jucatori.orasePosbilAlimentare && jucatori.orasePosbilAlimentare<=12)
+        if(10<jucatori[indiceJucator].orasePosbilAlimentare && jucatori[indiceJucator].orasePosbilAlimentare<=12)
             SMR = SMR + 2;
-        if(7<=jucatori.orasePosbilAlimentare && jucatori.orasePosbilAlimentare<=10)
+        if(7<=jucatori[indiceJucator].orasePosbilAlimentare && jucatori[indiceJucator].orasePosbilAlimentare<=10)
             SMR = SMR + 5;
-        if(jucatori.orasePosbilAlimentare<=6)
+        if(jucatori[indiceJucator].orasePosbilAlimentare<=6)
             SMR = SMR + 10;
     }
     if(stage==3){
-        if(16<=jucatori.orasePosbilAlimentare && jucatori.orasePosbilAlimentare<=18)
+        if(16<=jucatori[indiceJucator].orasePosbilAlimentare && jucatori[indiceJucator].orasePosbilAlimentare<=18)
             SMR = SMR + 0.5;
-        if(14<=jucatori.orasePosbilAlimentare && jucatori.orasePosbilAlimentare<16)
+        if(14<=jucatori[indiceJucator].orasePosbilAlimentare && jucatori[indiceJucator].orasePosbilAlimentare<16)
             SMR = SMR + 1;
-        if(12<=jucatori.orasePosbilAlimentare && jucatori.orasePosbilAlimentare <14)
+        if(12<=jucatori[indiceJucator].orasePosbilAlimentare && jucatori[indiceJucator].orasePosbilAlimentare <14)
             SMR = SMR + 1.5;
-        if(jucatori.orasePosbilAlimentare<12)
+        if(jucatori[indiceJucator].orasePosbilAlimentare<12)
             SMR = SMR + 5;
     }
-    if(0<=SMR && SMR<=4){
+    int distantaNrOraseAlim = -1;
+    for(int i=0; i<nrJucatori; i++){
+        if(jucatori[i].orasePosbilAlimentare>jucatori[indiceJucator].orasePosbilAlimentare && i!=indiceJucator)
+            distantaNrOraseAlim = jucatori[i].orasePosbilAlimentare;
+    }
+    if(distantaNrOraseAlim-jucatori[indiceJucator].orasePosbilAlimentare==jucatori[indiceJucator].orasePosbilAlimentare)
+        SMR = SMR + 1;
+    if(distantaNrOraseAlim-jucatori[indiceJucator].orasePosbilAlimentare<jucatori[indiceJucator].orasePosbilAlimentare)
+        SMR = SMR + 0.5;
+    if(distantaNrOraseAlim-jucatori[indiceJucator].orasePosbilAlimentare>jucatori[indiceJucator].orasePosbilAlimentare){
+        if(distantaNrOraseAlim==18)
+            SMR = SMR+10.5;
+        else{
+                SMR = SMR + (0.5*distantaNrOraseAlim-jucatori[indiceJucator].orasePosbilAlimentare);
+        }
+    }
+    if(0<=SMR && SMR<=6){
         SetConsoleTextAttribute(h,4);
         cout<<"⚠ NU"<<endl;
     }
-    if(4<SMR && SMR<=8){
+    if(6<SMR && SMR<=9.5){
         SetConsoleTextAttribute(h, 14);
         cout<<"INDECIS"<<endl;
     }
-    if(9<=SMR){
+    if(9.5<=SMR){
         SetConsoleTextAttribute(h, 2);
         cout<<"✓DA"<<endl;
     }
@@ -479,12 +495,6 @@ void citireCentraleInUz(char centInUz[9],jucator_ jucatori[],int &nrJucatori,int
     cout<<"Dati numarul de centrale ce se afla pe piata."<<endl;
     cin>>centPePiata;
     cin.ignore();
-    for(int i=0; i<nrJucatori; i++){
-        SetConsoleTextAttribute(h, detectareCuloare(jucatori[i]));
-        cout<<jucatori[i].nume<<": ";
-        recomandareCumparareCentrale(jucatori[i], stage, nrJucatori, h);
-        SetConsoleTextAttribute(h, 15);
-    }
     for(int i=0; i<centPePiata; i++){
         if(i+1!=1)
             cout<<"Dati a"<<i+1<<"-a centrala: ";
