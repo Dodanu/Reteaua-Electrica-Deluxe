@@ -64,7 +64,7 @@ struct conex{
     int cordX;
     int cordY;
     int pret;
-    int nrCentrale;
+    int nrCentrale = 0;
 };
 
 struct oras{
@@ -98,7 +98,7 @@ void afisareHartaEu(hartaEU hE)
             cout<<nrOras<<" ";
             cout<<hE.orase[a][hE.oX[a][b]].numeOras<<endl;
             for(int c=0; c<hE.orase[a][hE.oX[a][b]].nrConex; c++){
-                cout<<nrConex<<"     "<<hE.orase[a][hE.oX[a][b]].conexiuni[c].numeConex<<endl;
+                cout<<nrConex<<"     "<<hE.orase[a][hE.oX[a][b]].conexiuni[c].numeConex<<" "<<hE.orase[a][hE.oX[a][b]].conexiuni[c].pret<<endl;
                 nrConex++;
             }
             nrOras++;
@@ -139,26 +139,35 @@ void citireNumeConexHarta(hartaEU &hE)
     }
 }
 
+void citirePretConexHarta(hartaEU &hE)
+{
+    for(int a=0; a<hE.i; a++){
+        for(int b=0; b<hE.j[a]; b++){
+            for(int c=0; c<hE.orase[a][hE.oX[a][b]].nrConex; c++){
+                heuPretConex>>hE.orase[a][hE.oX[a][b]].conexiuni[c].pret;
+            }
+        }
+    }
+}
+
 void calcaulareConexiuniOrase(hartaEU &hE)
 {
     int auxI, auxJ;
     for(int a=0; a<hE.i; a++){
         for(int b=0; b<hE.j[a]; b++){
             for(int c=0; c<hE.orase[a][hE.oX[a][b]].nrConex; c++){
-                for(int c=0; c<hE.orase[a][hE.oX[a][b]].nrConex; c++){
-                    for(int d=0; d<hE.i; d++){
-                        for(int f=0; f<hE.j[a]; f++){
-                            if(strcmp(hE.orase[a][hE.oX[a][b]].conexiuni[c].numeConex,hE.orase[d][hE.oX[d][f]].numeOras)==0){
-                                auxI = d;
-                                auxJ = f;
-                                d = hE.i;
-                                f=hE.j[a];
-                            }
+                for(int d=0; d<hE.i; d++){
+                    for(int f=0; f<hE.j[a]; f++){
+                        if(strcmp(hE.orase[a][hE.oX[a][b]].conexiuni[c].numeConex,hE.orase[d][hE.oX[d][f]].numeOras)==0){
+                            auxI = d;
+                            auxJ = f;
+                            d = hE.i;
+                            f=hE.j[a];
                         }
                     }
-                    hE.orase[a][hE.oX[a][b]].conexiuni[c].cordX = a - auxJ;
-                    hE.orase[a][hE.oX[a][b]].conexiuni[c].cordY = hE.oX[a][b] - auxI;
                 }
+                hE.orase[a][hE.oX[a][b]].conexiuni[c].cordX = a - auxJ;
+                hE.orase[a][hE.oX[a][b]].conexiuni[c].cordY = hE.oX[a][b] - auxI;
             }
         }
     }
@@ -854,6 +863,6 @@ int main()
     citireNumeHartaEU(hartaEuropa);
     citireNrConexHartaEu(hartaEuropa);
     citireNumeConexHarta(hartaEuropa);
-    //afisareHartaEu(hartaEuropa);
+    afisareHartaEu(hartaEuropa);
     return 0;
 }
