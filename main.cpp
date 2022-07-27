@@ -464,7 +464,7 @@ void recomandareCumparareCentrale(jucator_ jucatori,int stage,int nrJucatori,HAN
     }
     if(9<=SMR){
         SetConsoleTextAttribute(h, 2);
-        cout<<"DA"<<endl;
+        cout<<"✓DA"<<endl;
     }
     SetConsoleTextAttribute(h, 15);
 }
@@ -995,9 +995,9 @@ int main()
     int eX=1, eY=1;
     int eMeta[3] = {10,10,10};
     jucator_ jucatori[6];
-    citireJucatori(jucatori, numarJucatori, h);
-    citireCentrale(centrale);
-    citireCentraleInUz(centInUz,jucatori,numarJucatori,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
+    //citireJucatori(jucatori, numarJucatori, h);
+    //citireCentrale(centrale);
+    //citireCentraleInUz(centInUz,jucatori,numarJucatori,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
     //cataSchimbareCombustibil(numarJucatori,stage,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
     //citireNumeHartaEU(hartaEuropa);
     //citireNrConexHartaEu(hartaEuropa);
