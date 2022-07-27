@@ -98,7 +98,7 @@ void afisareHartaEu(hartaEU hE)
             cout<<nrOras<<" ";
             cout<<hE.orase[a][hE.oX[a][b]].numeOras<<endl;
             for(int c=0; c<hE.orase[a][hE.oX[a][b]].nrConex; c++){
-                cout<<nrConex<<"     "<<hE.orase[a][hE.oX[a][b]].conexiuni[c].numeConex<<" "<<hE.orase[a][hE.oX[a][b]].conexiuni[c].pret<<endl;
+                cout<<nrConex<<"     "<<hE.orase[a][hE.oX[a][b]].conexiuni[c].numeConex<<" "<<hE.orase[a][hE.oX[a][b]].conexiuni[c].pret<<" "<<hE.orase[a][hE.oX[a][b]].conexiuni[c].cordX<<" "<<hE.orase[a][hE.oX[a][b]].conexiuni[c].cordY<<endl;
                 nrConex++;
             }
             nrOras++;
@@ -166,8 +166,14 @@ void calcaulareConexiuniOrase(hartaEU &hE)
                         }
                     }
                 }
-                hE.orase[a][hE.oX[a][b]].conexiuni[c].cordX = a - auxJ;
-                hE.orase[a][hE.oX[a][b]].conexiuni[c].cordY = hE.oX[a][b] - auxI;
+                if(a>auxI)
+                    hE.orase[a][hE.oX[a][b]].conexiuni[c].cordX = a - auxI;
+                else
+                    hE.orase[a][hE.oX[a][b]].conexiuni[c].cordX = auxI - a;
+                if(hE.oX[a][b]>auxJ)
+                    hE.orase[a][hE.oX[a][b]].conexiuni[c].cordY = hE.oX[a][b] - auxJ;
+                else
+                    hE.orase[a][hE.oX[a][b]].conexiuni[c].cordY = auxJ - hE.oX[a][b];
             }
         }
     }
@@ -863,6 +869,8 @@ int main()
     citireNumeHartaEU(hartaEuropa);
     citireNrConexHartaEu(hartaEuropa);
     citireNumeConexHarta(hartaEuropa);
+    citirePretConexHarta(hartaEuropa);
+    calcaulareConexiuniOrase(hartaEuropa);
     afisareHartaEu(hartaEuropa);
     return 0;
 }
