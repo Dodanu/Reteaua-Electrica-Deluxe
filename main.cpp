@@ -417,7 +417,57 @@ void citireCentrale(centrala centrale[])
     }
 }
 
-void recomandareCumparareCentrale(jucator_ jucatori[], )
+void recomandareCumparareCentrale(jucator_ jucatori,int stage,int nrJucatori,HANDLE h)
+{
+    float SMR = 0;
+    if(jucatori.orasePosbilAlimentare < jucatori.nrOrase)
+        SMR = SMR + 1;
+    if(jucatori.orasePosbilAlimentare > jucatori.nrOrase)
+        SMR = SMR - 0.5;
+    if(jucatori.orasePosbilAlimentare==0)
+        SMR = SMR + 10;
+    if(stage==1){
+        if(jucatori.orasePosbilAlimentare==6 || jucatori.orasePosbilAlimentare==7)
+            SMR = SMR + 1;
+        if(jucatori.orasePosbilAlimentare<=5 && 3<=jucatori.orasePosbilAlimentare)
+            SMR = SMR + 1.5;
+        if(jucatori.orasePosbilAlimentare<3 && 1<=jucatori.orasePosbilAlimentare)
+            SMR = SMR + 5;
+    }
+    if(stage==2){
+        if(12<jucatori.orasePosbilAlimentare)
+            SMR = SMR + 0.5;
+        if(10<jucatori.orasePosbilAlimentare && jucatori.orasePosbilAlimentare<=12)
+            SMR = SMR + 2;
+        if(7<=jucatori.orasePosbilAlimentare && jucatori.orasePosbilAlimentare<=10)
+            SMR = SMR + 5;
+        if(jucatori.orasePosbilAlimentare<=6)
+            SMR = SMR + 10;
+    }
+    if(stage==3){
+        if(16<=jucatori.orasePosbilAlimentare && jucatori.orasePosbilAlimentare<=18)
+            SMR = SMR + 0.5;
+        if(14<=jucatori.orasePosbilAlimentare && jucatori.orasePosbilAlimentare<16)
+            SMR = SMR + 1;
+        if(12<=jucatori.orasePosbilAlimentare && jucatori.orasePosbilAlimentare <14)
+            SMR = SMR + 1.5;
+        if(jucatori.orasePosbilAlimentare<12)
+            SMR = SMR + 5;
+    }
+    if(0<=SMR && SMR<=4){
+        SetConsoleTextAttribute(h,4);
+        cout<<"⚠ NU"<<endl;
+    }
+    if(4<SMR && SMR<=8){
+        SetConsoleTextAttribute(h, 14);
+        cout<<"INDECIS"<<endl;
+    }
+    if(9<=SMR){
+        SetConsoleTextAttribute(h, 2);
+        cout<<"DA"<<endl;
+    }
+    SetConsoleTextAttribute(h, 15);
+}
 
 void citireCentraleInUz(char centInUz[9],jucator_ jucatori[],int &nrJucatori,int stage,centrala centrale[],HANDLE h,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
@@ -429,6 +479,12 @@ void citireCentraleInUz(char centInUz[9],jucator_ jucatori[],int &nrJucatori,int
     cout<<"Dati numarul de centrale ce se afla pe piata."<<endl;
     cin>>centPePiata;
     cin.ignore();
+    for(int i=0; i<nrJucatori; i++){
+        SetConsoleTextAttribute(h, detectareCuloare(jucatori[i]));
+        cout<<jucatori[i].nume<<": ";
+        recomandareCumparareCentrale(jucatori[i], stage, nrJucatori, h);
+        SetConsoleTextAttribute(h, 15);
+    }
     for(int i=0; i<centPePiata; i++){
         if(i+1!=1)
             cout<<"Dati a"<<i+1<<"-a centrala: ";
@@ -526,6 +582,7 @@ void citireCentraleInUz(char centInUz[9],jucator_ jucatori[],int &nrJucatori,int
             jucatori[aux3-1].centraleDetinute[jucatori[aux3-1].contorCenDet] = centraleInUz[aux2];
             jucatori[aux3-1].bani = jucatori[aux3-1].bani - jucatori[aux3-1].centraleDetinute[jucatori[aux3-1].contorCenDet].pret;
             jucatori[aux3-1].contorCenDet++;
+            jucatori[aux3-1].orasePosbilAlimentare = jucatori[aux3-1].centraleDetinute[jucatori[aux3-1].contorCenDet].orase;
         }
         else{
             SetConsoleTextAttribute(h, 4);
@@ -938,18 +995,17 @@ int main()
     int eX=1, eY=1;
     int eMeta[3] = {10,10,10};
     jucator_ jucatori[6];
-    //cin.ignore();
-    //citireJucatori(jucatori, numarJucatori, h);
-    //citireCentrale(centrale);
-    //citireCentraleInUz(centInUz,jucatori,numarJucatori,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
+    citireJucatori(jucatori, numarJucatori, h);
+    citireCentrale(centrale);
+    citireCentraleInUz(centInUz,jucatori,numarJucatori,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
     //cataSchimbareCombustibil(numarJucatori,stage,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
-    citireNumeHartaEU(hartaEuropa);
-    citireNrConexHartaEu(hartaEuropa);
-    citireNumeConexHarta(hartaEuropa);
-    citirePretConexHarta(hartaEuropa);
-    calculareSMCx(hartaEuropa);
-    calculareSMO(hartaEuropa);
-    afisareSMO(hartaEuropa, h);
+    //citireNumeHartaEU(hartaEuropa);
+    //citireNrConexHartaEu(hartaEuropa);
+    //citireNumeConexHarta(hartaEuropa);
+    //citirePretConexHarta(hartaEuropa);
+    //calculareSMCx(hartaEuropa);
+    //calculareSMO(hartaEuropa);
+    //afisareSMO(hartaEuropa, h);
     //afisareHartaEu(hartaEuropa);
     return 0;
 }
