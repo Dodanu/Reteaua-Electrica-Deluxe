@@ -53,6 +53,7 @@ struct jucator_{
     char culoare[255];
     char combDetinut[4][1] = {0, 0, 0, 0};
     centrala centraleDetinute[3];
+    int orasePosbilAlimentare = 0;
     int contorCenDet=0;
     int bani = 50;
     int ordine;
@@ -64,6 +65,7 @@ struct conex{
     int cordX;
     int cordY;
     int pret;
+    float SMCx;
     int nrCentrale = 0;
 };
 
@@ -72,6 +74,9 @@ struct oras{
     char regiune[255];
     int nrCentrale = 0;
     int nrConex;
+    float SMO;
+    float SMCxTotal = 0;
+    int pretConexTotal = 0;
     conex conexiuni[8];
 };
 
@@ -150,6 +155,53 @@ void citirePretConexHarta(hartaEU &hE)
     }
 }
 
+void calculareSMCx(hartaEU &hE)
+{
+    int aux;
+    for(int a=0; a<hE.i; a++){
+        for(int b=0; b<hE.j[a]; b++){
+            for(int c=0; c<hE.orase[a][hE.oX[a][b]].nrConex; c++){
+                switch(hE.orase[a][hE.oX[a][b]].conexiuni[c].nrCentrale){
+                    case 0:
+                        aux = 10;
+                        break;
+                    case 1:
+                        aux = 15;
+                        break;
+                    case 2:
+                        aux = 20;
+                        break;
+                }
+                hE.orase[a][hE.oX[a][b]].conexiuni[c].SMCx = 0 + hE.orase[a][hE.oX[a][b]].conexiuni[c].pret + aux;
+                hE.orase[a][hE.oX[a][b]].SMCxTotal = 0 + hE.orase[a][hE.oX[a][b]].conexiuni[c].SMCx;
+            }
+        }
+    }
+}
+
+void calculareSMO(hartaEU &hE)
+{
+    int aux;
+    for(int a=0; a<hE.i; a++){
+        for(int b=0; b<hE.j[a]; b++){
+            for(int c=0; c<hE.orase[a][hE.oX[a][b]].nrConex; c++){
+                hE.orase[a][hE.oX[a][b]].pretConexTotal = hE.orase[a][hE.oX[a][b]].pretConexTotal + hE.orase[a][hE.oX[a][b]].conexiuni[c].pret;
+            }
+            if(1<=hE.orase[a][hE.oX[a][b]].nrConex && hE.orase[a][hE.oX[a][b]].nrConex<3)
+                aux = -5;
+            if(3<=hE.orase[a][hE.oX[a][b]].nrConex && hE.orase[a][hE.oX[a][b]].nrConex<4)
+                aux = 0;
+            if(4<=hE.orase[a][hE.oX[a][b]].nrConex && hE.orase[a][hE.oX[a][b]].nrConex<=5)
+                aux = 5;
+            if(6<=hE.orase[a][hE.oX[a][b]].nrConex && hE.orase[a][hE.oX[a][b]].nrConex<=7)
+                aux = 10;
+            hE.orase[a][hE.oX[a][b]].SMO = 0 + aux + hE.orase[a][hE.oX[a][b]].SMCxTotal/10 - hE.orase[a][hE.oX[a][b]].pretConexTotal/10;
+            //hE.orase[a][hE.oX[a][b]].SMO = hE.orase[a][hE.oX[a][b]].SMO * -1;
+        }
+    }
+}
+
+/*
 void calcaulareConexiuniOrase(hartaEU &hE)
 {
     int auxI, auxJ;
@@ -178,6 +230,7 @@ void calcaulareConexiuniOrase(hartaEU &hE)
         }
     }
 }
+*/
 
 void citireJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
 {
@@ -363,6 +416,8 @@ void citireCentrale(centrala centrale[])
         i++;
     }
 }
+
+void recomandareCumparareCentrale(jucator_ jucatori[], )
 
 void citireCentraleInUz(char centInUz[9],jucator_ jucatori[],int &nrJucatori,int stage,centrala centrale[],HANDLE h,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
@@ -832,6 +887,31 @@ void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori
     }
 }
 
+void afisareSMO(hartaEU hE,HANDLE h)
+{
+    for(int a=0; a<hE.i; a++){
+        for(int b=0; b<hE.j[a]; b++){
+            SetConsoleTextAttribute(h, 15);
+            cout<<hE.orase[a][hE.oX[a][b]].numeOras<<" ";
+            if(-10<=hE.orase[a][hE.oX[a][b]].SMO && hE.orase[a][hE.oX[a][b]].SMO<=1.5){
+                SetConsoleTextAttribute(h, 4);
+                cout<<hE.orase[a][hE.oX[a][b]].SMO<<endl;
+            }
+            else{
+                if(1.5<hE.orase[a][hE.oX[a][b]].SMO && hE.orase[a][hE.oX[a][b]].SMO<=3){
+                    SetConsoleTextAttribute(h, 14);
+                    cout<<hE.orase[a][hE.oX[a][b]].SMO<<endl;
+                }
+                else{
+                    SetConsoleTextAttribute(h, 2);
+                    cout<<hE.orase[a][hE.oX[a][b]].SMO<<endl;
+                }
+            }
+            SetConsoleTextAttribute(h, 15);
+        }
+    }
+}
+
 int main()
 {
     int runda = 0, stage = 1, numarJucatori;
@@ -857,9 +937,6 @@ int main()
     int ePreturi[1][9] = {{0}};
     int eX=1, eY=1;
     int eMeta[3] = {10,10,10};
-    int nrOrasPtVic = 18, nrOrasdetinut, nrOrasDetinutAltiJucatori[5][1] = {{0},{0},{0},{0},{0}};
-    int orasPosbilAlimentare, orasPosbilAlimentareAltiJucatori[5][1] = {{0},{0},{0},{0},{0}};
-    int numarOraseCuCentrale[7][1];
     jucator_ jucatori[6];
     //cin.ignore();
     //citireJucatori(jucatori, numarJucatori, h);
@@ -870,7 +947,9 @@ int main()
     citireNrConexHartaEu(hartaEuropa);
     citireNumeConexHarta(hartaEuropa);
     citirePretConexHarta(hartaEuropa);
-    calcaulareConexiuniOrase(hartaEuropa);
-    afisareHartaEu(hartaEuropa);
+    calculareSMCx(hartaEuropa);
+    calculareSMO(hartaEuropa);
+    afisareSMO(hartaEuropa, h);
+    //afisareHartaEu(hartaEuropa);
     return 0;
 }
