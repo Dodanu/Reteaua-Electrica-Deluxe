@@ -1068,7 +1068,6 @@ int main()
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     hartaEU hartaEuropa;
     centrala centrale[44];
-    combustibil comb[5];
     jucator_ jucatori[6];
     combustibil comb[7];
     strcpy(comb[0].numeComb,"carbune");
