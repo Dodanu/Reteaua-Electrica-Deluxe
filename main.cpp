@@ -104,6 +104,7 @@ void toLower(char txt[])
     }
 }
 
+/*
 void asignareComb(combustibil comb[])
 {
     strcpy(comb[0].numeComb,"carbune");
@@ -149,6 +150,7 @@ void asignareComb(combustibil comb[])
     comb[5].combTotal = 0;
     comb[5].meta = {10,10,10};
 }
+*/
 
 void afisareHartaEu(hartaEU hE)
 {
@@ -541,39 +543,40 @@ void recomandareDacaCumparareCentrale(jucator_ jucatori[],int stage,int nrJucato
     SetConsoleTextAttribute(h, 15);
 }
 
-void recomandareCareCentralaCump(char &centInUz,jucator_ jucatori[],int nrJucatori,int stage,HANDLE h,combustibil comb[])
+void recomandareCareCentralaCump(centrala &centInUz,jucator_ jucatori[],int nrJucatori,int stage,HANDLE h,combustibil comb[])
 {
     int auxComb;
-    if(strcmp(centraleInUz[i].numeComb,"C")==0)
+    if(strcmp(centInUz.numeComb,"C")==0)
         auxComb = 0;
-    if(strcmp(centraleInUz[i].numeComb,"A")==0)
+    if(strcmp(centInUz.numeComb,"A")==0)
         auxComb = 1;
-    if(strcmp(centraleInUz[i].numeComb,"P")==0)
+    if(strcmp(centInUz.numeComb,"P")==0)
         auxComb = 2;
-    if(strcmp(centraleInUz[i].numeComb,"AP")==0)
+    if(strcmp(centInUz.numeComb,"AP")==0)
         auxComb = 1;
-    if(strcmp(centraleInUz[i].numeComb,"N")==0)
+    if(strcmp(centInUz.numeComb,"N")==0)
         auxComb = 4;
     int jucatoriCuAcelasiTipCombustibil = 0;
     for(int i=0; i<nrJucatori; i++){
-        for(int j=0; j<jucatori[i].contorCenDet){
+        for(int j=0; j<jucatori[i].contorCenDet; j++){
             if(auxComb==0)
-                if(strcmp(centraleInUz[i].numeComb,"C")==0)
+                if(strcmp(jucatori[i].centraleDetinute[j].numeComb,"C")==0)
                     jucatoriCuAcelasiTipCombustibil++;
             if(auxComb==1)
-                if(strcmp(centraleInUz[i].numeComb,"A")==0)
+                if(strcmp(jucatori[i].centraleDetinute[j].numeComb,"A")==0)
                     jucatoriCuAcelasiTipCombustibil++;
             if(auxComb==2)
-                if(strcmp(centraleInUz[i].numeComb,"P")==0)
+                if(strcmp(jucatori[i].centraleDetinute[j].numeComb,"P")==0)
                     jucatoriCuAcelasiTipCombustibil++;
             if(auxComb==4)
-                if(strcmp(centraleInUz[i].numeComb,"N")==0)
+                if(strcmp(jucatori[i].centraleDetinute[j].numeComb,"N")==0)
                     jucatoriCuAcelasiTipCombustibil++;
+        }
     }
     centInUz.SMC = centInUz.SMC - (jucatoriCuAcelasiTipCombustibil/2);
 }
 
-void citireCentraleInUz(char centInUz[9],jucator_ jucatori[],int &nrJucatori,int stage,centrala centrale[],HANDLE h,combustibil comb[])
+void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori,int stage,centrala centrale[],HANDLE h,combustibil comb[])
 {
     int centPePiata, nAux = 0, centraleCump;
     float auxSMC[45];
@@ -588,29 +591,29 @@ void citireCentraleInUz(char centInUz[9],jucator_ jucatori[],int &nrJucatori,int
             cout<<"Dati a"<<i+1<<"-a centrala: ";
         else
             cout<<"Dati prima centrala: ";
-        cin.getline(centInUz, 9);
+        cin.getline(centInUz[i].numeCen, 9);
         for(int j=0; j<42; j++){
-            if(strcmp(centrale[j].numeCen,centInUz)==0){
+            if(strcmp(centrale[j].numeCen,centInUz[i].numeCen)==0){
                 int ors = centrale[j].orase;
                 if(centrale[j].orase<3)
                     ors = ors * -1 - (3-ors);
                 if(strcmp(centrale[j].numeComb,"C")==0){
-                    centrale[j].SMC = comb.meta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(comb[0])) - (centrale[j].pret/10);
+                    centrale[j].SMC = comb[0].meta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(comb[0])) - (centrale[j].pret/10);
                 }
                 if(strcmp(centrale[j].numeComb,"A")==0){
-                    centrale[j].SMC = comb.meta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(comb[1])) - (centrale[j].pret/10);
+                    centrale[j].SMC = comb[1].meta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(comb[1])) - (centrale[j].pret/10);
                 }
                 if(strcmp(centrale[j].numeComb,"P")==0){
-                    centrale[j].SMC = comb.meta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(comb[2])) - (centrale[j].pret/10);
+                    centrale[j].SMC = comb[2].meta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(comb[2])) - (centrale[j].pret/10);
                 }
                 if(strcmp(centrale[j].numeComb,"AP")==0){
-                    centrale[j].SMC = comb.meta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(comb[3])) - (centrale[j].pret/10);
+                    centrale[j].SMC = comb[3].meta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(comb[3])) - (centrale[j].pret/10);
                 }
                 if(strcmp(centrale[j].numeComb,"N")==0){
-                    centrale[j].SMC = comb.meta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(comb[4])) - (centrale[j].pret/10);
+                    centrale[j].SMC = comb[4].meta[stage] + ors - (centrale[j].combNecesar+gasirePrimPret(comb[4])) - (centrale[j].pret/10);
                 }
                 if(strcmp(centrale[j].numeComb,"E")==0){
-                    centrale[j].SMC = comb.meta[stage] + ors - (centrale[j].pret/10);
+                    centrale[j].SMC = comb[5].meta[stage] + ors - (centrale[j].pret/10);
                 }
                 auxSMC[nAux] = centrale[j].SMC;
                 strcpy(auxNum[nAux], centrale[j].numeCen);
@@ -626,6 +629,7 @@ void citireCentraleInUz(char centInUz[9],jucator_ jucatori[],int &nrJucatori,int
     for(int i=0; i<nAux; i++){
         if(strcmp(centraleInUz[i].numeComb,"C")==0){
             SetConsoleTextAttribute(h, comb[0].culoareComb);
+        }
         if(strcmp(centraleInUz[i].numeComb,"A")==0){
             SetConsoleTextAttribute(h, comb[1].culoareComb);
         }
@@ -643,26 +647,26 @@ void citireCentraleInUz(char centInUz[9],jucator_ jucatori[],int &nrJucatori,int
         }
         cout<<i+1<<") "<<centraleInUz[i].numeCen<<" ";
         SetConsoleTextAttribute(h, 15);
-        recomandareCareCentralaCump(centInUz[nAux],jucatori,nrJucatori,stage,h,comb);
+        recomandareCareCentralaCump(centrale[i],jucatori,nrJucatori,stage,h,comb);
         if(8<=centrale[i].SMC){
             SetConsoleTextAttribute(h, 2);
             cout<<"✓ DA ";
             SetConsoleTextAttribute(h, 10);
-            cout<<centrale[j].SMC<<endl;
+            cout<<centrale[i].SMC<<endl;
+            SetConsoleTextAttribute(h, 15);
         }
-        SetConsoleTextAttribute(h, 15);
         else{
             if(5<=centrale[i].SMC && centrale[i].SMC<8){
                 SetConsoleTextAttribute(h, 14);
                 cout<<"INDECIS "<<endl;
                 SetConsoleTextAttribute(h, 10);
-                cout<<centrale[j].SMC<<endl;
+                cout<<centrale[i].SMC<<endl;
             }
             else{
                 SetConsoleTextAttribute(h, 4);
                 cout<<"⚠ NU "<<endl;
                 SetConsoleTextAttribute(h, 10);
-                cout<<centrale[j].SMC<<endl;
+                cout<<centrale[i].SMC<<endl;
             }
         }
     }
@@ -670,6 +674,7 @@ void citireCentraleInUz(char centInUz[9],jucator_ jucatori[],int &nrJucatori,int
     for(int i=0; i<nAux; i++){
         if(strcmp(centraleInUz[i].numeComb,"C")==0){
             SetConsoleTextAttribute(h, comb[0].culoareComb);
+        }
         if(strcmp(centraleInUz[i].numeComb,"A")==0){
             SetConsoleTextAttribute(h, comb[1].culoareComb);
         }
@@ -717,19 +722,18 @@ void citireCentraleInUz(char centInUz[9],jucator_ jucatori[],int &nrJucatori,int
             SetConsoleTextAttribute(h, 15);
         }
     }
-
 }
 
 void schimbareCombustibil(combustibil comb,int cateAdaug)
 {
     for(int i=comb.x-1; i>=0; i--){
         for(int j=comb.y-1; j>=0; j--){
-            if(cateDeAdaug==0)
+            if(cateAdaug==0)
                 break;
             else{
                 if(comb.preturi[i][j]==0){
                     comb.preturi[i][j] = 1;
-                    cateDeAdaug--;
+                    cateAdaug--;
                 }
             }
         }
@@ -740,12 +744,12 @@ void eliminareCombustibil(combustibil comb,int cateDeElimin)
 {
     for(int i=0; i<comb.x; i++){
         for(int j=0; j<comb.y; j++){
-            if(catDeElimin==0)
+            if(cateDeElimin==0)
                 break;
             else{
                 if(comb.preturi[i][j]==1){
                     comb.preturi[i][j] = 0;
-                    catDeElimin--;
+                    cateDeElimin--;
                 }
             }
         }
@@ -770,7 +774,7 @@ int verificarePretComb(combustibil comb,int cateVerificare)
     return pretFin;
 }
 
-void cataSchimbareCombustibil(int nrJucatori,int stage,combustibil comb[])
+void cataSchimbareCombustibil(int nrJucatori,int stage,combustibil comb[],HANDLE h)
 {
     int resurseDeAdaug, n=4;
     for(int i=0; i<n; i++){
@@ -782,7 +786,7 @@ void cataSchimbareCombustibil(int nrJucatori,int stage,combustibil comb[])
                 SetConsoleTextAttribute(h, 15);
                 cout<<":";
                 cin>>resurseDeAdaug;
-                schimbareCombustibil(comb[0]);
+                schimbareCombustibil(comb[0], resurseDeAdaug);
                 break;
             case 1:
                 cout<<"Cata ";
@@ -1067,6 +1071,48 @@ int main()
     combustibil comb[5];
     jucator_ jucatori[6];
     combustibil comb[7];
+    strcpy(comb[0].numeComb,"carbune");
+    comb[0].culoareComb = 6;
+    comb[0].x = 9;
+    comb[0].y = 4;
+    comb[0].combTotal = 27;
+    comb[0].preturi = {{0},{0},{0, 0, 1, 1},{0, 1, 1, 1},{0, 1, 1, 1},{0, 1, 1, 1},{0, 1, 1, 1},{0, 0, 1, 1},{0, 0, 1, 1}};
+    comb[0].meta = {5, 10, 5};
+    strcpy(comb[1].numeComb,"apa");
+    comb[1].culoareComb = 3;
+    comb[1].x = 8;
+    comb[1].y = 3;
+    comb[1].combTotal = 24;
+    comb[1].preturi = {{0},{0, 0, 1},{1, 1, 1},{1, 1, 1},{1, 1, 1},{1, 1, 1},{1, 1, 1},{1, 1, 1}};
+    comb[1].meta = {6, 8, 10};
+    strcpy(comb[2].numeComb,"petrol");
+    comb[2].culoareComb = 8;
+    comb[2].x = 8;
+    comb[2].y = 1;
+    comb[2].combTotal = 21;
+    comb[2].preturi = {{0},{0, 0, 0, 1},{0, 0, 1, 1},{0, 0, 1, 1},{0, 0, 1, 1},{0, 0, 1, 1},{0, 0, 1, 1},{1, 1, 1, 1}};
+    comb[2].meta = {6, 7, 9};
+    strcpy(comb[3].numeComb,"apapetrol");
+    comb[3].culoareComb = 1;
+    comb[3].preturi = {{0},{0, 0, 1, 1},{1, 1, 1, 1, 1},{1, 1, 1, 1, 1},{1, 1, 1, 1, 1},{1, 1, 1, 1, 1},{1, 1, 1, 1, 1},{1, 1, 1, 1}}
+    comb[3].x = 8;
+    comb[3].y = 5;
+    comb[3].combTotal = 45;
+    comb[3].meta = {7, 9, 11};
+    strcpy(comb[4].numeComb,"nuclear");
+    comb[4].culoareComb = 12;
+    comb[4].preturi = {{0},{0},{0},{0},{0},{0},{0, 1},{1, 1},{1, 1}};
+    comb[4].x = 8;
+    comb[4].y = 2;
+    comb[4].combTotal = 12;
+    comb[4].meta = {3, 3, 5};
+    strcpy(comb[5].numeComb,"eco");
+    comb[5].culoareComb = 10;
+    comb[5].preturi = {{1}}
+    comb[5].x = 1;
+    comb[5].y = 1;
+    comb[5].combTotal = 0;
+    comb[5].meta = {10,10,10};
     //citireJucatori(jucatori, numarJucatori, h);
     //citireCentrale(centrale);
     //citireCentraleInUz(centInUz,jucatori,numarJucatori,stage,centrale,h,comb);
