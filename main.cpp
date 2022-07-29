@@ -77,6 +77,10 @@ struct oras{
     float SMO;
     float SMCxTotal = 0;
     int pretConexTotal = 0;
+    int pretOras = 10;
+    int culoare = 15;
+    int jucator = 0;
+    int nrJucatori = 0;
     conex conexiuni[8];
 };
 
@@ -199,6 +203,23 @@ void calculareSMO(hartaEU &hE)
             //hE.orase[a][hE.oX[a][b]].SMO = hE.orase[a][hE.oX[a][b]].SMO * -1;
         }
     }
+}
+
+int cautareOras(hartaEU hE,char deCautat[])
+{
+    int ab;
+    char copieNumeOras[255];
+    for(int a=0; a<hE.i; a++){
+        for(int b=0; b<hE.j[a]; b++){
+            strcpy(copieNumeOras, hE.orase[a][hE.oX[a][b]].numeOras);
+            toLower(copieNumeOras);
+            if(strcmp(copieNumeOras, deCautat)==0){
+                ab = b*10+a;
+                return ab;
+            }
+        }
+    }
+    return -100;
 }
 
 /*
@@ -982,7 +1003,7 @@ void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori
     }
 }
 
-void afisareSMO(hartaEU hE,HANDLE h)
+void afisareToateSMO(hartaEU hE,HANDLE h)
 {
     for(int a=0; a<hE.i; a++){
         for(int b=0; b<hE.j[a]; b++){
@@ -1003,6 +1024,48 @@ void afisareSMO(hartaEU hE,HANDLE h)
                 }
             }
             SetConsoleTextAttribute(h, 15);
+        }
+    }
+}
+
+void construirePeOras(int stage,hartaEU &hE,jucator_ jucatori[],int nrJucatori,HANDLE h)
+{
+    char raspuns[255];
+    bool gresit = false;
+    for(int i=0; i<nrJucatori; i++){
+        SetConsoleTextAttribute(h, 15);
+        cout<<"Cate orase a construit ";
+        SetConsoleTextAttribute(h, detectareCuloare(jucatori[i]));
+        cout<<jucatori[i].nume;
+        SetConsoleTextAttribute(h, 15);
+        cout<<"?"<<endl;
+        cin.get(raspuns, 255, '\n');
+        toLower(raspuns);
+        if(strcmp(raspuns, "nu")!=0||strcmp(raspuns, "negativ")!=0||strcmp(raspuns, "nicidecum")!=0||strcmp(raspuns, "deloc")!=0||strcmp(raspuns, "exclus")!=0||strcmp(raspuns, "nup")!=0||strcmp(raspuns, "de niciun fel")!=0||strcmp(raspuns, "0")!=0){
+            int aux = atoi(raspuns);
+            for(int j=0; j<aux; j++){
+                cout<<"Dati numele orasului "<<j<<endl;
+                cin.get(raspuns, 255, '\n');
+                toLower(raspuns);
+                if(cautareOras(hE, raspuns)!=-100){
+                    hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].jucator = j;
+                    hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].culoare = detectareCuloare(jucatori[i]);
+                    hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori++;
+                    jucatori[i].bani = jucatori[i].bani - hE.oras[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras;
+                    if(hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori==1)
+                        hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras = 15;
+                    if(hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori==2)
+                        hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras = 20;
+                }
+                else{
+                    SetConsoleTextAttribute(h, 4);
+                    cout<<"⚠ Eroare!(0008)";
+                    SetConsoleTextAttribute(h, 14);
+                    cout<<"Orasul negasit, for-ul se va repeta la final cu acelasi indice."<<endl;
+                    j--;
+                    gresit = true;
+                }
+            }
         }
     }
 }
@@ -1033,17 +1096,18 @@ int main()
     int ePreturi[1][9] = {{0}};
     int eX=1, eY=1;
     int eMeta[3] = {10,10,10};
-    citireJucatori(jucatori, numarJucatori, h);
-    citireCentrale(centrale);
-    citireCentraleInUz(centInUz,jucatori,numarJucatori,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
-    cataSchimbareCombustibil(numarJucatori,h,stage,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
-    citireNumeHartaEU(hartaEuropa);
-    citireNrConexHartaEu(hartaEuropa);
-    citireNumeConexHarta(hartaEuropa);
-    citirePretConexHarta(hartaEuropa);
-    calculareSMCx(hartaEuropa);
-    calculareSMO(hartaEuropa);
-    afisareSMO(hartaEuropa, h);
-    afisareHartaEu(hartaEuropa);
+    //citireJucatori(jucatori, numarJucatori, h);
+    //citireCentrale(centrale);
+    //citireCentraleInUz(centInUz,jucatori,numarJucatori,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
+    //cataSchimbareCombustibil(numarJucatori,h,stage,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
+    //citireNumeHartaEU(hartaEuropa);
+    //citireNrConexHartaEu(hartaEuropa);
+    //citireNumeConexHarta(hartaEuropa);
+    //citirePretConexHarta(hartaEuropa);
+    //calculareSMCx(hartaEuropa);
+    //calculareSMO(hartaEuropa);
+    //afisareToateSMO(hartaEuropa, h);
+    //afisareHartaEu(hartaEuropa);
+    //construirePeOras(stage, hartaEuropa, jucatori, h);
     return 0;
 }
