@@ -1072,13 +1072,13 @@ void construirePeOras(int stage,hartaEU &hE,jucator_ jucatori[],int nrJucatori,H
     }
 }
 
-void verificareSMOInJurulOraselorDetinute(jucator_ jucatori,hartaEU hE,HANDLE h)
+void verificareSMOInJurulOraselorDetinute(jucator_ jucatori[],hartaEU hE,HANDLE h)
 {
     int aAux, bAux;
-    for(int c=0; c<jucatori.nrOrase; c++){
+    for(int c=0; c<jucatori[0].nrOrase; c++){
         for(int a=0; a<hE.i; a++){
             for(int b=0; b<hE.j[a]; b++){
-                if(strcmp(hE.orase[a][hE.oX[a][b]].numeJuc, jucatori.nume)==0){
+                if(strcmp(hE.orase[a][hE.oX[a][b]].numeJuc, jucatori[0].nume)==0){
                     for(int d=0; d<hE.orase[a][hE.oX[a][b]].nrConex; d++){
                         cout<<hE.orase[a + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordX][hE.oX[a][b] + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordY].numeOras<<": ";
                         int aux = hE.orase[a + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordX][hE.oX[a][b] + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordY].SMO;
@@ -1130,7 +1130,8 @@ int main()
     int ePreturi[1][9] = {{0}};
     int eX=1, eY=1;
     int eMeta[3] = {10,10,10};
-    char auxForUI[255] = '1';
+    char auxForUI[255] = {"1"};
+    int pentruUI = 0;
     //citireJucatori(jucatori, numarJucatori, h);
     //citireCentrale(centrale);
     //citireCentraleInUz(centInUz,jucatori,numarJucatori,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
@@ -1145,9 +1146,75 @@ int main()
     //afisareHartaEu(hartaEuropa);
     //construirePeOras(stage, hartaEuropa, jucatori, h);
     //verificareSMOInJurulOraselorDetinute(jucatori, hartaEU, h);
+    citireJucatori(jucatori, numarJucatori, h);
+    citireCentrale(centrale);
+    citireNumeHartaEU(hartaEuropa);
+    citireNrConexHartaEu(hartaEuropa);
+    citireNumeConexHarta(hartaEuropa);
+    citirePretConexHarta(hartaEuropa);
+    calculareSMCx(hartaEuropa);
+    calculareSMO(hartaEuropa);
     while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
         cin.getline(auxForUI, 255);
-        
+        cout<<"s = mers in jos; w = mers in sus; a = enter; n = alta calculare"<<endl;
+        if(pentruUI==0){
+            cout<<"-> centrale in uz"<<endl;
+            cout<<"   afisare scor meta a fiecare oras"<<endl;
+            cout<<"   construie pe oras"<<endl;
+            cout<<"   afisare scor meta a conexiuniilor unui oras"<<endl;
+        }
+        if(pentruUI==1){
+            cout<<"   centrale in uz"<<endl;
+            cout<<"-> afisare scor meta a fiecare oras"<<endl;
+            cout<<"   construie pe oras"<<endl;
+            cout<<"   afisare scor meta a conexiuniilor unui oras"<<endl;
+        }
+        if(pentruUI==2){
+            cout<<"   centrale in uz"<<endl;
+            cout<<"   afisare scor meta a fiecare oras"<<endl;
+            cout<<"-> construie pe oras"<<endl;
+            cout<<"   afisare scor meta a conexiuniilor unui oras"<<endl;
+        }
+        if(pentruUI==3){
+            cout<<"   centrale in uz"<<endl;
+            cout<<"   afisare scor meta a fiecare oras"<<endl;
+            cout<<"   construie pe oras"<<endl;
+            cout<<"-> afisare scor meta a conexiuniilor unui oras"<<endl;
+        }
+        cin.getline(auxForUI, 255);
+        if(strcmp(auxForUI, "e")==0){
+            system("CLS");
+            switch(pentruUI){
+                case 0:
+                    citireCentraleInUz(centInUz,jucatori,numarJucatori,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
+                    break;
+                case 1:
+                    afisareToateSMO(hartaEuropa, h);
+                    break;
+                case 2:
+                    construirePeOras(stage, hartaEuropa, jucatori, numarJucatori, h);
+                    break;
+                case 3:
+                    verificareSMOInJurulOraselorDetinute(jucatori, hartaEuropa, h);
+                    break;
+            }
+            strcpy(auxForUI, "n");
+        }
+        if(strcmp(auxForUI, "s")==0){
+            strcpy(auxForUI, "n");
+            if(pentruUI!=3)
+                pentruUI++;
+            else
+                pentruUI = 0;
+        }
+        if(strcmp(auxForUI, "w")==0){
+            strcpy(auxForUI, "n");
+            if(pentruUI!=0)
+                pentruUI--;
+            else
+                pentruUI = 3;
+        }
+        system("CLS");
     }
     return 0;
 }
