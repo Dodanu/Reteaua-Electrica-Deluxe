@@ -72,6 +72,7 @@ struct conex{
 struct oras{
     char numeOras[255];
     char regiune[255];
+    char numeJuc[255];
     int nrCentrale = 0;
     int nrConex;
     float SMO;
@@ -79,7 +80,6 @@ struct oras{
     int pretConexTotal = 0;
     int pretOras = 10;
     int culoare = 15;
-    int jucator = 0;
     int nrJucatori = 0;
     conex conexiuni[8];
 };
@@ -1048,22 +1048,56 @@ void construirePeOras(int stage,hartaEU &hE,jucator_ jucatori[],int nrJucatori,H
                 cin.get(raspuns, 255, '\n');
                 toLower(raspuns);
                 if(cautareOras(hE, raspuns)!=-100){
-                    hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].jucator = j;
-                    hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].culoare = detectareCuloare(jucatori[i]);
-                    hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori++;
-                    jucatori[i].bani = jucatori[i].bani - hE.oras[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras;
-                    if(hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori==1)
-                        hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras = 15;
-                    if(hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori==2)
-                        hE.orase[cautareOras(hE, raspuns)%10][he.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras = 20;
+                    strcpy(hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].numeJuc, jucatori[j].nume);
+                    hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].culoare = detectareCuloare(jucatori[i]);
+                    hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori++;
+                    jucatori[i].bani = jucatori[i].bani - hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras;
+                    if(hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori==1)
+                        hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras = 15;
+                    if(hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori==2)
+                        hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras = 20;
+                    jucatori[i].nrOrase++;
                 }
                 else{
                     SetConsoleTextAttribute(h, 4);
                     cout<<"⚠ Eroare!(0008)";
                     SetConsoleTextAttribute(h, 14);
                     cout<<"Orasul negasit, for-ul se va repeta la final cu acelasi indice."<<endl;
+                    SetConsoleTextAttribute(h, 15);
                     j--;
                     gresit = true;
+                }
+            }
+        }
+    }
+}
+
+void verificareSMOInJurulOraselorDetinute(jucator_ jucatori,hartaEU hE,HANDLE h)
+{
+    int aAux, bAux;
+    for(int c=0; c<jucatori.nrOrase; c++){
+        for(int a=0; a<hE.i; a++){
+            for(int b=0; b<hE.j[a]; b++){
+                if(strcmp(hE.orase[a][hE.oX[a][b]].numeJuc, jucatori.nume)==0){
+                    for(int d=0; d<hE.orase[a][hE.oX[a][b]].nrConex; d++){
+                        cout<<hE.orase[a + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordX][hE.oX[a][b] + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordY].numeOras<<": ";
+                        int aux = hE.orase[a + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordX][hE.oX[a][b] + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordY].SMO;
+                        if(-10<=aux && aux<=1.5){
+                            SetConsoleTextAttribute(h, 4);
+                            cout<<aux<<endl;
+                        }
+                        else{
+                            if(1.5<aux && aux<=3){
+                                SetConsoleTextAttribute(h, 14);
+                                cout<<aux<<endl;
+                            }
+                            else{
+                                SetConsoleTextAttribute(h, 2);
+                                cout<<aux<<endl;
+                            }
+                        }
+                        SetConsoleTextAttribute(h, 15);
+                    }
                 }
             }
         }
@@ -1096,6 +1130,7 @@ int main()
     int ePreturi[1][9] = {{0}};
     int eX=1, eY=1;
     int eMeta[3] = {10,10,10};
+    char auxForUI[255] = '1';
     //citireJucatori(jucatori, numarJucatori, h);
     //citireCentrale(centrale);
     //citireCentraleInUz(centInUz,jucatori,numarJucatori,stage,centrale,h,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
@@ -1109,5 +1144,10 @@ int main()
     //afisareToateSMO(hartaEuropa, h);
     //afisareHartaEu(hartaEuropa);
     //construirePeOras(stage, hartaEuropa, jucatori, h);
+    //verificareSMOInJurulOraselorDetinute(jucatori, hartaEU, h);
+    while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
+        cin.getline(auxForUI, 255);
+        
+    }
     return 0;
 }
