@@ -582,16 +582,32 @@ void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori
                 if(strcmp(centrale[j].numeComb,"E")==0){
                     centrale[j].SMC = eMeta[stage] + ors - (centrale[j].pret/10);
                 }
+                cout<<centrale[j].SMC<<endl;
                 auxSMC[nAux] = centrale[j].SMC;
                 strcpy(auxNum[nAux], centrale[j].numeCen);
                 centraleInUz[nAux].pret = centrale[j].pret;
                 centraleInUz[nAux].orase = centrale[j].orase;
                 centraleInUz[nAux].combNecesar = centrale[j].combNecesar;
+                centraleInUz[nAux].SMC = centrale[j].SMC;
                 strcpy(centraleInUz[nAux].numeComb, centrale[j].numeComb);
                 strcpy(centraleInUz[nAux].numeCen, centrale[j].numeCen);
                 nAux++;
             }
         }
+    }
+    cout<<"Recomandare de cumparare a centralei"<<endl;
+    for(int j=0; j<nrJucatori; j++){
+        SetConsoleTextAttribute(h, detectareCuloare(jucatori[j]));
+        if(stage>1){
+            cout<<j+1<<") "<<jucatori[j].nume<<" ";
+            recomandareDacaCumparareCentrale(jucatori,stage,nrJucatori,h,j);
+        }
+        else{
+            cout<<j+1<<") "<<jucatori[j].nume<<" ";
+            SetConsoleTextAttribute(h, 2);
+            cout<<"DA"<<endl;
+        }
+        SetConsoleTextAttribute(h, 15);
     }
     for(int i=0; i<nAux; i++){
         if(strcmp(centraleInUz[i].numeComb,"C")==0){
@@ -614,9 +630,10 @@ void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori
         }
         cout<<i+1<<") "<<centraleInUz[i].numeCen<<" ";
         SetConsoleTextAttribute(h, 15);
-        if(stage > 1)
+        if(stage > 1){
             recomandareCareCentralaCump(centrale[i],jucatori,nrJucatori,stage,h);
-        if(8<=centrale[i].SMC){
+        }
+        if(7<=centrale[i].SMC){
             SetConsoleTextAttribute(h, 2);
             cout<<"DA ";
             SetConsoleTextAttribute(h, 10);
@@ -624,16 +641,16 @@ void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori
             SetConsoleTextAttribute(h, 15);
         }
         else{
-            if(5<=centrale[i].SMC && centrale[i].SMC<8){
+            if(4<=centrale[i].SMC && centrale[i].SMC<7){
                 SetConsoleTextAttribute(h, 14);
-                cout<<"INDECIS "<<endl;
-                SetConsoleTextAttribute(h, 10);
+                cout<<"INDECIS ";
+                SetConsoleTextAttribute(h, 14);
                 cout<<centrale[i].SMC<<endl;
             }
-            else{
+            if(centrale[i].SMC<4){
                 SetConsoleTextAttribute(h, 4);
-                cout<<"NU "<<endl;
-                SetConsoleTextAttribute(h, 10);
+                cout<<"NU ";
+                SetConsoleTextAttribute(h, 4);
                 cout<<centrale[i].SMC<<endl;
             }
         }
@@ -1158,7 +1175,7 @@ int main()
     //afisareHartaEu(hartaEuropa);
     //construirePeOras(stage, hartaEuropa, jucatori, h);
     //verificareSMOInJurulOraselorDetinute(jucatori, hartaEU, h);
-    citireJucatori(jucatori, numarJucatori, h);
+    //citireJucatori(jucatori, numarJucatori, h);
     citireCentrale(centrale);
     citireNumeHartaEU(hartaEuropa);
     citireNrConexHartaEu(hartaEuropa);
