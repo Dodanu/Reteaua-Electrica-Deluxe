@@ -275,7 +275,7 @@ void citireJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
         cin.get(aux2, 255, '\n');
         if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0){
             SetConsoleTextAttribute(h, 4);
-            cout<<"⚠ Eroare!(0001) ";
+            cout<<"Eroare!(0001) ";
             SetConsoleTextAttribute(h, 14);
             cout<<"Numele jucatorului a fost dat gresit, for-ul se va repeta la final cu acelasi indice."<<endl;
             i--;
@@ -289,7 +289,7 @@ void citireJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
         cin.get(aux2, 255, '\n');
         if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0){
             SetConsoleTextAttribute(h, 4);
-            cout<<"⚠ Eroare!(0002) ";
+            cout<<"Eroare!(0002) ";
             SetConsoleTextAttribute(h, 14);
             cout<<"Culoarea jucatorului a fost data gresit, for-ul se va repeta la final cu acelasi indice."<<endl;
             i--;
@@ -302,7 +302,7 @@ void citireJucatori(jucator_ jucatori[],int &nrJucatori,HANDLE h)
         cin.get(aux2, 255, '\n');
         if(strcmp(aux2, "nu")==0||strcmp(aux2, "negativ")==0||strcmp(aux2, "nicidecum")==0||strcmp(aux2, "deloc")==0||strcmp(aux2, "exclus")==0||strcmp(aux2, "nup")==0||strcmp(aux2, "de niciun fel")==0){
             SetConsoleTextAttribute(h, 4);
-            cout<<"⚠ Eroare!(0003) ";
+            cout<<"Eroare!(0003) ";
             SetConsoleTextAttribute(h, 14);
             cout<<"Ordinea jucatorului a fost data gresit, for-ul se va repeta la final cu acelasi indice."<<endl;
             SetConsoleTextAttribute(h, 15);
@@ -493,7 +493,7 @@ void recomandareDacaCumparareCentrale(jucator_ jucatori[],int stage,int nrJucato
     }
     if(0<=SMR && SMR<=6){
         SetConsoleTextAttribute(h,4);
-        cout<<"⚠ NU"<<endl;
+        cout<<"NU"<<endl;
     }
     if(6<SMR && SMR<=9.5){
         SetConsoleTextAttribute(h, 14);
@@ -501,7 +501,7 @@ void recomandareDacaCumparareCentrale(jucator_ jucatori[],int stage,int nrJucato
     }
     if(9.5<=SMR){
         SetConsoleTextAttribute(h, 2);
-        cout<<"✓DA"<<endl;
+        cout<<"DA"<<endl;
     }
     SetConsoleTextAttribute(h, 15);
 }
@@ -544,7 +544,6 @@ void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori
     int centPePiata, nAux = 0, centraleCump;
     float auxSMC[45];
     char auxNum[45][45];
-    char auxForUI[255] = "nush";
     int aux2, aux3;
     centrala centraleInUz[9];
     cout<<"Dati numarul de centrale ce se afla pe piata."<<endl;
@@ -615,10 +614,11 @@ void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori
         }
         cout<<i+1<<") "<<centraleInUz[i].numeCen<<" ";
         SetConsoleTextAttribute(h, 15);
-        recomandareCareCentralaCump(centrale[i],jucatori,nrJucatori,stage,h);
+        if(stage > 1)
+            recomandareCareCentralaCump(centrale[i],jucatori,nrJucatori,stage,h);
         if(8<=centrale[i].SMC){
             SetConsoleTextAttribute(h, 2);
-            cout<<"✓ DA ";
+            cout<<"DA ";
             SetConsoleTextAttribute(h, 10);
             cout<<centrale[i].SMC<<endl;
             SetConsoleTextAttribute(h, 15);
@@ -632,7 +632,7 @@ void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori
             }
             else{
                 SetConsoleTextAttribute(h, 4);
-                cout<<"⚠ NU "<<endl;
+                cout<<"NU "<<endl;
                 SetConsoleTextAttribute(h, 10);
                 cout<<centrale[i].SMC<<endl;
             }
@@ -641,7 +641,7 @@ void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori
     SetConsoleTextAttribute(h,15);
     for(int i=0; i<nAux; i++){
         if(strcmp(centraleInUz[i].numeComb,"C")==0){
-            SetConsoleTextAttribute(h, 6);
+        SetConsoleTextAttribute(h, 6);
         }
         if(strcmp(centraleInUz[i].numeComb,"A")==0){
             SetConsoleTextAttribute(h, 3);
@@ -670,7 +670,7 @@ void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori
         aux2 = aux2-1;
         cout<<"Care jucator a cumparat centrala?"<<endl;
         for(int j=0; j<nrJucatori; j++){
-            SetConsoleTextAttribute(h, detectareCuloare(jucatori[i]));
+            SetConsoleTextAttribute(h, detectareCuloare(jucatori[j]));
             cout<<j+1<<") "<<jucatori[j].nume<<" ";
             SetConsoleTextAttribute(h, 15);
         }
@@ -683,15 +683,12 @@ void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori
         }
         else{
             SetConsoleTextAttribute(h, 4);
-            cout<<"⚠ Eroare!(0004) ";
+            cout<<"Eroare!(0004) ";
             SetConsoleTextAttribute(h, 14);
             cout<<"Jucator necunoscut, for-ul se va repeta la final"<<endl;
             i--;
             SetConsoleTextAttribute(h, 15);
         }
-    }
-    while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
-        cin.getline(auxForUI, 255);
     }
 }
 
@@ -748,7 +745,6 @@ int verificarePretComb(int preturi[][9],int x,int y,int cateVerificare)
 void cataSchimbareCombustibil(int nrJucatori,HANDLE h,int stage,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
     int resurseDeAdaug, n=4;
-    char auxForUI[255] = "nush";
     for(int i=0; i<n; i++){
         switch(i){
             case 0:
@@ -789,16 +785,12 @@ void cataSchimbareCombustibil(int nrJucatori,HANDLE h,int stage,int cPreturi[][9
                 break;
         }
     }
-    while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
-        cin.getline(auxForUI, 255);
-    }
 }
 
 void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori[],int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
     bool automat = false, maxim = false, faraBani = false, combGasit = false, greseala = false;
     char raspuns[255], raspuns2[255];
-    char auxForUI[255] = "nush";
     int deCump,aux,preturi;
     SetConsoleTextAttribute(h, 14);
     cout<<"Doriti ca acesta functie sa ruleze automat?"<<endl;
@@ -855,7 +847,7 @@ void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori
                 }
                 if(preturi>jucatori[i].bani){
                     SetConsoleTextAttribute(h, 4);
-                    cout<<"⚠ Eroare!(0005) ";
+                    cout<<"Eroare!(0005) ";
                     SetConsoleTextAttribute(h, 14);
                     cout<<"Jucatorul selectat nu are banii necesari pentru cumparea resurselor, aceasta iteratie a for-ului va incepe in mod manual!"<<endl;
                     SetConsoleTextAttribute(h, 15);
@@ -907,7 +899,7 @@ void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori
                     if(strcmp(raspuns2, "nu")==0||strcmp(raspuns2, "negativ")==0||strcmp(raspuns2, "nicidecum")==0||strcmp(raspuns2, "deloc")==0||strcmp(raspuns2, "exclus")==0||strcmp(raspuns2, "nup")==0||strcmp(raspuns2, "de niciun fel")==0){
                         greseala = true;
                         SetConsoleTextAttribute(h, 4);
-                        cout<<"⚠ Eroare!(0006) ";
+                        cout<<"Eroare!(0006) ";
                         SetConsoleTextAttribute(h, 14);
                         cout<<"Combustibilul a fost selectat gresit! For-ul se va repeta la finalul iteratiei cu acelasi indice."<<endl;
                         i--;
@@ -933,7 +925,7 @@ void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori
                     if(strcmp(raspuns2, "nu")==0||strcmp(raspuns2, "negativ")==0||strcmp(raspuns2, "nicidecum")==0||strcmp(raspuns2, "deloc")==0||strcmp(raspuns2, "exclus")==0||strcmp(raspuns2, "nup")==0||strcmp(raspuns2, "de niciun fel")==0){
                         greseala = true;
                         SetConsoleTextAttribute(h, 4);
-                        cout<<"⚠ Eroare!(0006) ";
+                        cout<<"Eroare!(0006) ";
                         SetConsoleTextAttribute(h, 14);
                         cout<<"Combustibilul a fost selectat gresit! For-ul se va repeta la finalul iteratiei cu acelasi indice."<<endl;
                         i--;
@@ -959,7 +951,7 @@ void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori
                     if(strcmp(raspuns2, "nu")==0||strcmp(raspuns2, "negativ")==0||strcmp(raspuns2, "nicidecum")==0||strcmp(raspuns2, "deloc")==0||strcmp(raspuns2, "exclus")==0||strcmp(raspuns2, "nup")==0||strcmp(raspuns2, "de niciun fel")==0){
                         greseala = true;
                         SetConsoleTextAttribute(h, 4);
-                        cout<<"⚠ Eroare!(0006) ";
+                        cout<<"Eroare!(0006) ";
                         SetConsoleTextAttribute(h, 14);
                         cout<<"Combustibilul a fost selectat gresit! For-ul se va repeta la finalul iteratiei cu acelasi indice."<<endl;
                         i--;
@@ -985,7 +977,7 @@ void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori
                     if(strcmp(raspuns2, "nu")==0||strcmp(raspuns2, "negativ")==0||strcmp(raspuns2, "nicidecum")==0||strcmp(raspuns2, "deloc")==0||strcmp(raspuns2, "exclus")==0||strcmp(raspuns2, "nup")==0||strcmp(raspuns2, "de niciun fel")==0){
                         greseala = true;
                         SetConsoleTextAttribute(h, 4);
-                        cout<<"⚠ Eroare!(0006) ";
+                        cout<<"Eroare!(0006) ";
                         SetConsoleTextAttribute(h, 14);
                         cout<<"Combustibilul a fost selectat gresit! For-ul se va repeta la finalul iteratiei cu acelasi indice."<<endl;
                         i--;
@@ -1001,7 +993,7 @@ void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori
                 }
                 if(combGasit==false){
                     SetConsoleTextAttribute(h, 4);
-                    cout<<"⚠ Eroare!(0007)";
+                    cout<<"Eroare!(0007)";
                     SetConsoleTextAttribute(h, 14);
                     cout<<" Combustibilul cautat nu a fost gasit/nu exista, aceasta iteratie a for-ului se va repeta la final cu acelasi indice."<<endl;
                     i--;
@@ -1010,36 +1002,34 @@ void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori
             }
         }
     }
-    while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
-        cin.getline(auxForUI, 255);
-    }
 }
 
 void afisareToateSMO(hartaEU hE,HANDLE h)
 {
     char auxForUI[255];
-    for(int a=0; a<hE.i; a++){
-        for(int b=0; b<hE.j[a]; b++){
-            SetConsoleTextAttribute(h, 15);
-            cout<<hE.orase[a][hE.oX[a][b]].numeOras<<" ";
-            if(-10<=hE.orase[a][hE.oX[a][b]].SMO && hE.orase[a][hE.oX[a][b]].SMO<=1.5){
-                SetConsoleTextAttribute(h, 4);
-                cout<<hE.orase[a][hE.oX[a][b]].SMO<<endl;
-            }
-            else{
-                if(1.5<hE.orase[a][hE.oX[a][b]].SMO && hE.orase[a][hE.oX[a][b]].SMO<=3){
-                    SetConsoleTextAttribute(h, 14);
+    while(strcmp(auxForUI, "\0")==0){
+        for(int a=0; a<hE.i; a++){
+            for(int b=0; b<hE.j[a]; b++){
+                SetConsoleTextAttribute(h, 15);
+                cout<<hE.orase[a][hE.oX[a][b]].numeOras<<" ";
+                if(-10<=hE.orase[a][hE.oX[a][b]].SMO && hE.orase[a][hE.oX[a][b]].SMO<=1.5){
+                    SetConsoleTextAttribute(h, 4);
                     cout<<hE.orase[a][hE.oX[a][b]].SMO<<endl;
                 }
                 else{
-                    SetConsoleTextAttribute(h, 2);
-                    cout<<hE.orase[a][hE.oX[a][b]].SMO<<endl;
+                    if(1.5<hE.orase[a][hE.oX[a][b]].SMO && hE.orase[a][hE.oX[a][b]].SMO<=3){
+                        SetConsoleTextAttribute(h, 14);
+                        cout<<hE.orase[a][hE.oX[a][b]].SMO<<endl;
+                    }
+                    else{
+                        SetConsoleTextAttribute(h, 2);
+                        cout<<hE.orase[a][hE.oX[a][b]].SMO<<endl;
+                    }
                 }
+                SetConsoleTextAttribute(h, 15);
             }
-            SetConsoleTextAttribute(h, 15);
         }
-    }
-    while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
+        cout<<"Introdu o tasta pentru a continua"<<endl;
         cin.get(auxForUI, 255, '\n');
     }
 }
@@ -1047,7 +1037,6 @@ void afisareToateSMO(hartaEU hE,HANDLE h)
 void construirePeOras(int stage,hartaEU &hE,jucator_ jucatori[],int nrJucatori,HANDLE h)
 {
     char raspuns[255];
-    char auxForUI[255];
     bool gresit = false;
     for(int i=0; i<nrJucatori; i++){
         SetConsoleTextAttribute(h, 15);
@@ -1059,9 +1048,10 @@ void construirePeOras(int stage,hartaEU &hE,jucator_ jucatori[],int nrJucatori,H
         cin.get(raspuns, 255, '\n');
         toLower(raspuns);
         if(strcmp(raspuns, "nu")!=0||strcmp(raspuns, "negativ")!=0||strcmp(raspuns, "nicidecum")!=0||strcmp(raspuns, "deloc")!=0||strcmp(raspuns, "exclus")!=0||strcmp(raspuns, "nup")!=0||strcmp(raspuns, "de niciun fel")!=0||strcmp(raspuns, "0")!=0){
+            cin.ignore();
             int aux = atoi(raspuns);
             for(int j=0; j<aux; j++){
-                cout<<"Dati numele orasului "<<j<<endl;
+                cout<<"Dati numele orasului "<<j+1<<endl;
                 cin.get(raspuns, 255, '\n');
                 toLower(raspuns);
                 if(cautareOras(hE, raspuns)!=-100){
@@ -1077,7 +1067,7 @@ void construirePeOras(int stage,hartaEU &hE,jucator_ jucatori[],int nrJucatori,H
                 }
                 else{
                     SetConsoleTextAttribute(h, 4);
-                    cout<<"⚠ Eroare!(0008)";
+                    cout<<"Eroare!(0008)";
                     SetConsoleTextAttribute(h, 14);
                     cout<<"Orasul negasit, for-ul se va repeta la final cu acelasi indice."<<endl;
                     SetConsoleTextAttribute(h, 15);
@@ -1087,40 +1077,42 @@ void construirePeOras(int stage,hartaEU &hE,jucator_ jucatori[],int nrJucatori,H
             }
         }
     }
-    //while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
-    //    cin.getline(auxForUI, 255);
-    //}
 }
 
 void verificareSMOInJurulOraselorDetinute(jucator_ jucatori[],hartaEU hE,HANDLE h)
 {
     int aAux, bAux;
-    for(int c=0; c<jucatori[0].nrOrase; c++){
-        for(int a=0; a<hE.i; a++){
-            for(int b=0; b<hE.j[a]; b++){
-                if(strcmp(hE.orase[a][hE.oX[a][b]].numeJuc, jucatori[0].nume)==0){
-                    for(int d=0; d<hE.orase[a][hE.oX[a][b]].nrConex; d++){
-                        cout<<hE.orase[a + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordX][hE.oX[a][b] + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordY].numeOras<<": ";
-                        int aux = hE.orase[a + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordX][hE.oX[a][b] + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordY].SMO;
-                        if(-10<=aux && aux<=1.5){
-                            SetConsoleTextAttribute(h, 4);
-                            cout<<aux<<endl;
-                        }
-                        else{
-                            if(1.5<aux && aux<=3){
-                                SetConsoleTextAttribute(h, 14);
+    char auxForUI[255];
+    while(strcmp(auxForUI, "\0")==0){
+        for(int c=0; c<jucatori[0].nrOrase; c++){
+            for(int a=0; a<hE.i; a++){
+                for(int b=0; b<hE.j[a]; b++){
+                    if(strcmp(hE.orase[a][hE.oX[a][b]].numeJuc, jucatori[0].nume)==0){
+                        for(int d=0; d<hE.orase[a][hE.oX[a][b]].nrConex; d++){
+                            cout<<hE.orase[a + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordX][hE.oX[a][b] + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordY].numeOras<<": ";
+                            int aux = hE.orase[a + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordX][hE.oX[a][b] + hE.orase[a][hE.oX[a][b]].conexiuni[d].cordY].SMO;
+                            if(-10<=aux && aux<=1.5){
+                                SetConsoleTextAttribute(h, 4);
                                 cout<<aux<<endl;
                             }
                             else{
-                                SetConsoleTextAttribute(h, 2);
-                                cout<<aux<<endl;
+                                if(1.5<aux && aux<=3){
+                                    SetConsoleTextAttribute(h, 14);
+                                    cout<<aux<<endl;
+                                }
+                                else{
+                                    SetConsoleTextAttribute(h, 2);
+                                    cout<<aux<<endl;
+                                }
                             }
+                            SetConsoleTextAttribute(h, 15);
                         }
-                        SetConsoleTextAttribute(h, 15);
                     }
                 }
             }
         }
+        cout<<"Introdu o tasta pentru a continua"<<endl;
+        cin.get(auxForUI, 255, '\n');
     }
 }
 
@@ -1166,7 +1158,7 @@ int main()
     //afisareHartaEu(hartaEuropa);
     //construirePeOras(stage, hartaEuropa, jucatori, h);
     //verificareSMOInJurulOraselorDetinute(jucatori, hartaEU, h);
-    //citireJucatori(jucatori, numarJucatori, h);
+    citireJucatori(jucatori, numarJucatori, h);
     citireCentrale(centrale);
     citireNumeHartaEU(hartaEuropa);
     citireNrConexHartaEu(hartaEuropa);
@@ -1175,54 +1167,69 @@ int main()
     calculareSMCx(hartaEuropa);
     calculareSMO(hartaEuropa);
     while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
-        cout<<"s = mers in jos; w = mers in sus; e = enter; n = alta calculare"<<endl;
+        cout<<"s = mers in jos; w = mers in sus; e = enter"<<endl;
         if(pentruUI==0){
             cout<<"-> centrale in uz"<<endl;
-            cout<<"   afisare scor meta a fiecare oras"<<endl;
+            cout<<"   afisare scor meta a fiecarui oras"<<endl;
+            cout<<"   afisare scor in jurul oraselor detinute"<<endl;
             cout<<"   construie pe oras"<<endl;
-            cout<<"   afisare scor meta a conexiuniilor unui oras"<<endl;
             cout<<"   schimbare numarul combustibilului care se afla pe piata"<<endl;
             cout<<"   cumparare combustibil pentru fiecare jucator"<<endl;
+            cout<<"   ordonare automata a jucatoriilor"<<endl;
         }
         if(pentruUI==1){
             cout<<"   centrale in uz"<<endl;
-            cout<<"-> afisare scor meta a fiecare oras"<<endl;
+            cout<<"-> afisare scor meta a fiecarui oras"<<endl;
+            cout<<"   afisare scor in jurul oraselor detinute"<<endl;
             cout<<"   construie pe oras"<<endl;
-            cout<<"   afisare scor meta a conexiuniilor unui oras"<<endl;
             cout<<"   schimbare numarul combustibilului care se afla pe piata"<<endl;
             cout<<"   cumparare combustibil pentru fiecare jucator"<<endl;
+            cout<<"   ordonare automata a jucatoriilor"<<endl;
         }
         if(pentruUI==2){
             cout<<"   centrale in uz"<<endl;
-            cout<<"   afisare scor meta a fiecare oras"<<endl;
-            cout<<"-> construie pe oras"<<endl;
-            cout<<"   afisare scor meta a conexiuniilor unui oras"<<endl;
+            cout<<"   afisare scor meta a fiecarui oras"<<endl;
+            cout<<"-> afisare scor in jurul oraselor detinute"<<endl;
+            cout<<"   construie pe oras"<<endl;
             cout<<"   schimbare numarul combustibilului care se afla pe piata"<<endl;
             cout<<"   cumparare combustibil pentru fiecare jucator"<<endl;
+            cout<<"   ordonare automata a jucatoriilor"<<endl;
         }
         if(pentruUI==3){
             cout<<"   centrale in uz"<<endl;
-            cout<<"   afisare scor meta a fiecare oras"<<endl;
-            cout<<"   construie pe oras"<<endl;
-            cout<<"-> afisare scor meta a conexiuniilor unui oras"<<endl;
+            cout<<"   afisare scor meta a fiecarui oras"<<endl;
+            cout<<"   afisare scor in jurul oraselor detinute"<<endl;
+            cout<<"-> construie pe oras"<<endl;
             cout<<"   schimbare numarul combustibilului care se afla pe piata"<<endl;
             cout<<"   cumparare combustibil pentru fiecare jucator"<<endl;
+            cout<<"   ordonare automata a jucatoriilor"<<endl;
         }
         if(pentruUI==4){
             cout<<"   centrale in uz"<<endl;
-            cout<<"   afisare scor meta a fiecare oras"<<endl;
+            cout<<"   afisare scor meta a fiecarui oras"<<endl;
+            cout<<"   afisare scor in jurul oraselor detinute"<<endl;
             cout<<"   construie pe oras"<<endl;
-            cout<<"   afisare scor meta a conexiuniilor unui oras"<<endl;
             cout<<"-> schimbare numarul combustibilului care se afla pe piata"<<endl;
             cout<<"   cumparare combustibil pentru fiecare jucator"<<endl;
+            cout<<"   ordonare automata a jucatoriilor"<<endl;
         }
         if(pentruUI==5){
             cout<<"   centrale in uz"<<endl;
-            cout<<"   afisare scor meta a fiecare oras"<<endl;
+            cout<<"   afisare scor meta a fiecarui oras"<<endl;
+            cout<<"   afisare scor in jurul oraselor detinute"<<endl;
             cout<<"   construie pe oras"<<endl;
-            cout<<"   afisare scor meta a conexiuniilor unui oras"<<endl;
             cout<<"   schimbare numarul combustibilului care se afla pe piata"<<endl;
             cout<<"-> cumparare combustibil pentru fiecare jucator"<<endl;
+            cout<<"   ordonare automata a jucatoriilor"<<endl;
+        }
+        if(pentruUI==6){
+            cout<<"   centrale in uz"<<endl;
+            cout<<"   afisare scor meta a fiecarui oras"<<endl;
+            cout<<"   afisare scor in jurul oraselor detinute"<<endl;
+            cout<<"   construie pe oras"<<endl;
+            cout<<"   schimbare numarul combustibilului care se afla pe piata"<<endl;
+            cout<<"   cumparare combustibil pentru fiecare jucator"<<endl;
+            cout<<"-> ordonare automata a jucatoriilor"<<endl;
         }
         cin.getline(auxForUI, 255);
         if(strcmp(auxForUI, "e")==0){
@@ -1246,10 +1253,13 @@ int main()
                 case 5:
                     cumparareCombustibil(h,stage,numarJucatori,jucatori,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
                     break;
+                case 6:
+                    sortareOrdineJucatori(numarJucatori, jucatori);
+                    break;
             }
         }
         if(strcmp(auxForUI, "s")==0){
-            if(pentruUI!=5)
+            if(pentruUI!=6)
                 pentruUI++;
             else
                 pentruUI = 0;
@@ -1258,7 +1268,7 @@ int main()
             if(pentruUI!=0)
                 pentruUI--;
             else
-                pentruUI = 5;
+                pentruUI = 6;
         }
         system("CLS");
     }
