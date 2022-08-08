@@ -544,6 +544,7 @@ void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori
     int centPePiata, nAux = 0, centraleCump;
     float auxSMC[45];
     char auxNum[45][45];
+    char auxForUI[255] = "nush";
     int aux2, aux3;
     centrala centraleInUz[9];
     cout<<"Dati numarul de centrale ce se afla pe piata."<<endl;
@@ -689,6 +690,9 @@ void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori
             SetConsoleTextAttribute(h, 15);
         }
     }
+    while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
+        cin.getline(auxForUI, 255);
+    }
 }
 
 void schimbareCombustibil(int preturi[][9],int x,int y,int cateAdaug)
@@ -744,6 +748,7 @@ int verificarePretComb(int preturi[][9],int x,int y,int cateVerificare)
 void cataSchimbareCombustibil(int nrJucatori,HANDLE h,int stage,int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
     int resurseDeAdaug, n=4;
+    char auxForUI[255] = "nush";
     for(int i=0; i<n; i++){
         switch(i){
             case 0:
@@ -784,12 +789,16 @@ void cataSchimbareCombustibil(int nrJucatori,HANDLE h,int stage,int cPreturi[][9
                 break;
         }
     }
+    while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
+        cin.getline(auxForUI, 255);
+    }
 }
 
-void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori[],int &baniDentinuti,int baniDetAltiJucatori[][1],int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
+void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori[],int cPreturi[][9],int cX,int cY,int cMeta[],int aPreturi[][9],int aX,int aY,int aMeta[],int pPreturi[][9],int pX,int pY,int pMeta[],int aPPreturi[][9],int aPX,int aPY,int aPMeta[],int nPreturi[][9],int nX,int nY,int nMeta[],int ePreturi[][9],int eX,int eY,int eMeta[])
 {
     bool automat = false, maxim = false, faraBani = false, combGasit = false, greseala = false;
     char raspuns[255], raspuns2[255];
+    char auxForUI[255] = "nush";
     int deCump,aux,preturi;
     SetConsoleTextAttribute(h, 14);
     cout<<"Doriti ca acesta functie sa ruleze automat?"<<endl;
@@ -1001,10 +1010,14 @@ void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori
             }
         }
     }
+    while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
+        cin.getline(auxForUI, 255);
+    }
 }
 
 void afisareToateSMO(hartaEU hE,HANDLE h)
 {
+    char auxForUI[255];
     for(int a=0; a<hE.i; a++){
         for(int b=0; b<hE.j[a]; b++){
             SetConsoleTextAttribute(h, 15);
@@ -1026,11 +1039,15 @@ void afisareToateSMO(hartaEU hE,HANDLE h)
             SetConsoleTextAttribute(h, 15);
         }
     }
+    while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
+        cin.get(auxForUI, 255, '\n');
+    }
 }
 
 void construirePeOras(int stage,hartaEU &hE,jucator_ jucatori[],int nrJucatori,HANDLE h)
 {
     char raspuns[255];
+    char auxForUI[255];
     bool gresit = false;
     for(int i=0; i<nrJucatori; i++){
         SetConsoleTextAttribute(h, 15);
@@ -1070,6 +1087,9 @@ void construirePeOras(int stage,hartaEU &hE,jucator_ jucatori[],int nrJucatori,H
             }
         }
     }
+    //while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
+    //    cin.getline(auxForUI, 255);
+    //}
 }
 
 void verificareSMOInJurulOraselorDetinute(jucator_ jucatori[],hartaEU hE,HANDLE h)
@@ -1146,7 +1166,7 @@ int main()
     //afisareHartaEu(hartaEuropa);
     //construirePeOras(stage, hartaEuropa, jucatori, h);
     //verificareSMOInJurulOraselorDetinute(jucatori, hartaEU, h);
-    citireJucatori(jucatori, numarJucatori, h);
+    //citireJucatori(jucatori, numarJucatori, h);
     citireCentrale(centrale);
     citireNumeHartaEU(hartaEuropa);
     citireNrConexHartaEu(hartaEuropa);
@@ -1155,31 +1175,54 @@ int main()
     calculareSMCx(hartaEuropa);
     calculareSMO(hartaEuropa);
     while(strcmp(auxForUI, "end")!=0||strcmp(auxForUI, "0")!=0||strcmp(auxForUI, "sfarsit")!=0){
-        cin.getline(auxForUI, 255);
-        cout<<"s = mers in jos; w = mers in sus; a = enter; n = alta calculare"<<endl;
+        cout<<"s = mers in jos; w = mers in sus; e = enter; n = alta calculare"<<endl;
         if(pentruUI==0){
             cout<<"-> centrale in uz"<<endl;
             cout<<"   afisare scor meta a fiecare oras"<<endl;
             cout<<"   construie pe oras"<<endl;
             cout<<"   afisare scor meta a conexiuniilor unui oras"<<endl;
+            cout<<"   schimbare numarul combustibilului care se afla pe piata"<<endl;
+            cout<<"   cumparare combustibil pentru fiecare jucator"<<endl;
         }
         if(pentruUI==1){
             cout<<"   centrale in uz"<<endl;
             cout<<"-> afisare scor meta a fiecare oras"<<endl;
             cout<<"   construie pe oras"<<endl;
             cout<<"   afisare scor meta a conexiuniilor unui oras"<<endl;
+            cout<<"   schimbare numarul combustibilului care se afla pe piata"<<endl;
+            cout<<"   cumparare combustibil pentru fiecare jucator"<<endl;
         }
         if(pentruUI==2){
             cout<<"   centrale in uz"<<endl;
             cout<<"   afisare scor meta a fiecare oras"<<endl;
             cout<<"-> construie pe oras"<<endl;
             cout<<"   afisare scor meta a conexiuniilor unui oras"<<endl;
+            cout<<"   schimbare numarul combustibilului care se afla pe piata"<<endl;
+            cout<<"   cumparare combustibil pentru fiecare jucator"<<endl;
         }
         if(pentruUI==3){
             cout<<"   centrale in uz"<<endl;
             cout<<"   afisare scor meta a fiecare oras"<<endl;
             cout<<"   construie pe oras"<<endl;
             cout<<"-> afisare scor meta a conexiuniilor unui oras"<<endl;
+            cout<<"   schimbare numarul combustibilului care se afla pe piata"<<endl;
+            cout<<"   cumparare combustibil pentru fiecare jucator"<<endl;
+        }
+        if(pentruUI==4){
+            cout<<"   centrale in uz"<<endl;
+            cout<<"   afisare scor meta a fiecare oras"<<endl;
+            cout<<"   construie pe oras"<<endl;
+            cout<<"   afisare scor meta a conexiuniilor unui oras"<<endl;
+            cout<<"-> schimbare numarul combustibilului care se afla pe piata"<<endl;
+            cout<<"   cumparare combustibil pentru fiecare jucator"<<endl;
+        }
+        if(pentruUI==5){
+            cout<<"   centrale in uz"<<endl;
+            cout<<"   afisare scor meta a fiecare oras"<<endl;
+            cout<<"   construie pe oras"<<endl;
+            cout<<"   afisare scor meta a conexiuniilor unui oras"<<endl;
+            cout<<"   schimbare numarul combustibilului care se afla pe piata"<<endl;
+            cout<<"-> cumparare combustibil pentru fiecare jucator"<<endl;
         }
         cin.getline(auxForUI, 255);
         if(strcmp(auxForUI, "e")==0){
@@ -1192,27 +1235,30 @@ int main()
                     afisareToateSMO(hartaEuropa, h);
                     break;
                 case 2:
-                    construirePeOras(stage, hartaEuropa, jucatori, numarJucatori, h);
-                    break;
-                case 3:
                     verificareSMOInJurulOraselorDetinute(jucatori, hartaEuropa, h);
                     break;
+                case 3:
+                    construirePeOras(stage, hartaEuropa, jucatori, numarJucatori, h);
+                    break;
+                case 4:
+                    cataSchimbareCombustibil(numarJucatori,h,stage,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
+                    break;
+                case 5:
+                    cumparareCombustibil(h,stage,numarJucatori,jucatori,cPreturi,cX,cY,cMeta,aPreturi,aX,aY,aMeta,pPreturi,pX,pY,pMeta,aPpreturi,aPx,aPy,aPMeta,nPreturi,nX,nY,nMeta,ePreturi,eX,eY,eMeta);
+                    break;
             }
-            strcpy(auxForUI, "n");
         }
         if(strcmp(auxForUI, "s")==0){
-            strcpy(auxForUI, "n");
-            if(pentruUI!=3)
+            if(pentruUI!=5)
                 pentruUI++;
             else
                 pentruUI = 0;
         }
         if(strcmp(auxForUI, "w")==0){
-            strcpy(auxForUI, "n");
             if(pentruUI!=0)
                 pentruUI--;
             else
-                pentruUI = 3;
+                pentruUI = 5;
         }
         system("CLS");
     }
