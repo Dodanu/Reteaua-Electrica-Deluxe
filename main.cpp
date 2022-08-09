@@ -401,7 +401,7 @@ int detectareCuloare(jucator_ jucatori)
         return 1;
     }
     if(strcmp(jucatori.culoare, "galben")==0){
-        return 14;
+        return 6;
     }
     if(strcmp(jucatori.culoare, "rosu")==0){
         return 4;
@@ -496,7 +496,7 @@ void recomandareDacaCumparareCentrale(jucator_ jucatori[],int stage,int nrJucato
         cout<<"NU"<<endl;
     }
     if(6<SMR && SMR<=9.5){
-        SetConsoleTextAttribute(h, 14);
+        SetConsoleTextAttribute(h, 6);
         cout<<"INDECIS"<<endl;
     }
     if(9.5<=SMR){
@@ -642,15 +642,15 @@ void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori
         }
         else{
             if(4<=centraleInUz[i].SMC && centraleInUz[i].SMC<7){
-                SetConsoleTextAttribute(h, 14);
+                SetConsoleTextAttribute(h, 6);
                 cout<<"INDECIS ";
-                SetConsoleTextAttribute(h, 14);
+                SetConsoleTextAttribute(h, 15);
                 cout<<centraleInUz[i].SMC<<endl;
             }
             if(centraleInUz[i].SMC<4){
                 SetConsoleTextAttribute(h, 4);
                 cout<<"NU ";
-                SetConsoleTextAttribute(h, 4);
+                SetConsoleTextAttribute(h, 15);
                 cout<<centraleInUz[i].SMC<<endl;
             }
         }
@@ -1070,33 +1070,31 @@ void construirePeOras(int stage,hartaEU &hE,jucator_ jucatori[],int nrJucatori,H
         cout<<"?"<<endl;
         cin.get(raspuns, 255, '\n');
         toLower(raspuns);
-        if(strcmp(raspuns, "nu")!=0||strcmp(raspuns, "negativ")!=0||strcmp(raspuns, "nicidecum")!=0||strcmp(raspuns, "deloc")!=0||strcmp(raspuns, "exclus")!=0||strcmp(raspuns, "nup")!=0||strcmp(raspuns, "de niciun fel")!=0||strcmp(raspuns, "0")!=0){
+        int aux = atoi(raspuns);
+        for(int j=0; j<aux; j++){
+            cout<<"Dati numele orasului "<<j+1<<endl;
             cin.ignore();
-            int aux = atoi(raspuns);
-            for(int j=0; j<aux; j++){
-                cout<<"Dati numele orasului "<<j+1<<endl;
-                cin.get(raspuns, 255, '\n');
-                toLower(raspuns);
-                if(cautareOras(hE, raspuns)!=-100){
-                    strcpy(hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].numeJuc, jucatori[j].nume);
-                    hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].culoare = detectareCuloare(jucatori[i]);
-                    hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori++;
-                    jucatori[i].bani = jucatori[i].bani - hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras;
-                    if(hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori==1)
-                        hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras = 15;
-                    if(hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori==2)
-                        hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras = 20;
+            cin.get(raspuns, 255, '\n');
+            toLower(raspuns);
+            if(cautareOras(hE, raspuns)!=-100){
+                strcpy(hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].numeJuc, jucatori[j].nume);
+                hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].culoare = detectareCuloare(jucatori[i]);
+                hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori++;
+                jucatori[i].bani = jucatori[i].bani - hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras;
+                if(hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori==1)
+                    hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras = 15;
+                if(hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].nrJucatori==2)
+                    hE.orase[cautareOras(hE, raspuns)%10][hE.oX[cautareOras(hE, raspuns)%10][cautareOras(hE, raspuns)/10]].pretOras = 20;
                     jucatori[i].nrOrase++;
-                }
-                else{
-                    SetConsoleTextAttribute(h, 4);
-                    cout<<"Eroare!(0008)";
-                    SetConsoleTextAttribute(h, 14);
-                    cout<<"Orasul negasit, for-ul se va repeta la final cu acelasi indice."<<endl;
-                    SetConsoleTextAttribute(h, 15);
-                    j--;
-                    gresit = true;
-                }
+            }
+            else{
+                SetConsoleTextAttribute(h, 4);
+                cout<<"Eroare!(0008)";
+                SetConsoleTextAttribute(h, 14);
+                cout<<"Orasul negasit, for-ul se va repeta la final cu acelasi indice."<<endl;
+                SetConsoleTextAttribute(h, 15);
+                j--;
+                gresit = true;
             }
         }
     }
