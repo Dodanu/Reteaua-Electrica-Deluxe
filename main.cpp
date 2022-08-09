@@ -633,25 +633,25 @@ void citireCentraleInUz(centrala centInUz[9],jucator_ jucatori[],int &nrJucatori
         if(stage > 1){
             recomandareCareCentralaCump(centrale[i],jucatori,nrJucatori,stage,h);
         }
-        if(7<=centrale[i].SMC){
+        if(7<=centraleInUz[i].SMC){
             SetConsoleTextAttribute(h, 2);
             cout<<"DA ";
             SetConsoleTextAttribute(h, 10);
-            cout<<centrale[i].SMC<<endl;
+            cout<<centraleInUz[i].SMC<<endl;
             SetConsoleTextAttribute(h, 15);
         }
         else{
-            if(4<=centrale[i].SMC && centrale[i].SMC<7){
+            if(4<=centraleInUz[i].SMC && centraleInUz[i].SMC<7){
                 SetConsoleTextAttribute(h, 14);
                 cout<<"INDECIS ";
                 SetConsoleTextAttribute(h, 14);
-                cout<<centrale[i].SMC<<endl;
+                cout<<centraleInUz[i].SMC<<endl;
             }
-            if(centrale[i].SMC<4){
+            if(centraleInUz[i].SMC<4){
                 SetConsoleTextAttribute(h, 4);
                 cout<<"NU ";
                 SetConsoleTextAttribute(h, 4);
-                cout<<centrale[i].SMC<<endl;
+                cout<<centraleInUz[i].SMC<<endl;
             }
         }
     }
@@ -818,16 +818,21 @@ void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori
         automat = true;
     }
     SetConsoleTextAttribute(h, 14);
-    cout<<"Doriti sa fie cumparat maxim de combustibil sau minim?"<<endl;
     SetConsoleTextAttribute(h, 15);
-    if(strcmp(raspuns, "min")==0||strcmp(raspuns, "minim")==0){
-        maxim = false;
-    }
-    if(strcmp(raspuns, "max")==0||strcmp(raspuns, "maxim")==0){
-        maxim = false;
+    if(automat == true){
+        cout<<"Doriti sa fie cumparat maxim de combustibil sau minim?"<<endl;
+        SetConsoleTextAttribute(h, 15);
+        cin.ignore();
+        cin.getline(raspuns, 255);
+        if(strcmp(raspuns, "min")==0||strcmp(raspuns, "minim")==0){
+            maxim = false;
+        }
+        if(strcmp(raspuns, "max")==0||strcmp(raspuns, "maxim")==0){
+            maxim = false;
+        }
     }
     SetConsoleTextAttribute(h, 15);
-    for(int i=numarJucatori-1; i>=0; i--){
+    for(int i=numarJucatori-1; i>0; i--){
         preturi = 0;
         faraBani = false;
         for(int j=0; j<jucatori[i].contorCenDet; j++){
@@ -890,6 +895,7 @@ void cumparareCombustibil(HANDLE h,int stage,int numarJucatori,jucator_ jucatori
                 }
             }
             if(automat==false || faraBani==true){
+                cin.ignore();
                 cout<<"Cat combustibil doreste ";
                 SetConsoleTextAttribute(h, detectareCuloare(jucatori[i]));
                 cout<<jucatori[i].nume;
@@ -1175,7 +1181,7 @@ int main()
     //afisareHartaEu(hartaEuropa);
     //construirePeOras(stage, hartaEuropa, jucatori, h);
     //verificareSMOInJurulOraselorDetinute(jucatori, hartaEU, h);
-    //citireJucatori(jucatori, numarJucatori, h);
+    citireJucatori(jucatori, numarJucatori, h);
     citireCentrale(centrale);
     citireNumeHartaEU(hartaEuropa);
     citireNrConexHartaEu(hartaEuropa);
